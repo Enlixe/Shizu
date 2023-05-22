@@ -21,6 +21,17 @@ module.exports = {
         ephemeral: true,
       });
 
-    cmd.execute(interaction, bot);
+    const subCommand = interaction.options.getSubcommand(false);
+    if (subCommand) {
+      const scFile = bot.subCommands.get(
+        `${interaction.commandName}.${subCommand}`
+      );
+      if (!scFile)
+        return interaction.reply({
+          content: "This sub-command is outdated.",
+          ephemeral: true,
+        });
+      scFile.execute(interaction, bot);
+    } else cmd.execute(interaction, bot);
   },
 };

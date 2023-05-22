@@ -21,6 +21,12 @@ bot.logger = new Logger(); // client.logger.log('Client is Running!', ['CLIENT']
 
 bot.events = new Collection();
 bot.commands = new Collection();
+bot.subCommands = new Collection();
+
+const { connect } = require("mongoose");
+connect(bot.config.database, {}).then(() =>
+  bot.logger.log(`Database connected.`, ["CLIENT"])
+);
 
 loadEvents(bot);
 
