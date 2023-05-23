@@ -12,22 +12,25 @@ const bot = new Client({
   partials: [User, Message, GuildMember, ThreadMember],
 });
 
+const { connect } = require("mongoose");
+const Logger = require("./structures/functions/logger");
 const { loadEvents } = require("./structures/handlers/eventHandler");
+const { loadConfig } = require("./structures/functions/configLoader");
 
 bot.config = require("./config.js");
-
-const Logger = require("./structures/functions/logger");
 bot.logger = new Logger(); // client.logger.log('Client is Running!', ['CLIENT']);
 
 bot.events = new Collection();
 bot.commands = new Collection();
 bot.subCommands = new Collection();
 
-const { connect } = require("mongoose");
+bot.guildConfig = new Collection();
+
 connect(bot.config.database, {}).then(() =>
   bot.logger.log(`Database connected.`, ["CLIENT"])
 );
 
 loadEvents(bot);
+loadConfig(bot);
 
 bot.login(bot.config.token);
