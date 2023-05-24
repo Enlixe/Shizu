@@ -1,4 +1,8 @@
-const { ChatInputCommandInteraction, Client } = require("discord.js");
+const {
+  ChatInputCommandInteraction,
+  Client,
+  EmbedBuilder,
+} = require("discord.js");
 const { loadCommands } = require("../../../structures/handlers/commandHandler");
 
 module.exports = {
@@ -8,9 +12,14 @@ module.exports = {
    * @param {Client} bot
    */
   async execute(interaction, bot) {
+    interaction.deferReply({ ephemeral: true });
     await loadCommands(bot);
-    return interaction.reply({
-      content: "Reloaded Commands.",
+    return interaction.editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(bot.config.color.default)
+          .setDescription("Reloaded Commands."),
+      ],
       ephemeral: true,
     });
   },

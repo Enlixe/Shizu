@@ -12,12 +12,15 @@ const bot = new Client({
   partials: [User, Message, GuildMember, ThreadMember],
 });
 
-const { connect } = require("mongoose");
-const Logger = require("./structures/functions/logger");
-const { loadEvents } = require("./structures/handlers/eventHandler");
-const { loadConfig } = require("./structures/functions/configLoader");
+const { connect } = require("mongoose"),
+  chalk = require("chalk");
+
+const Logger = require("./structures/functions/logger"),
+  { loadEvents } = require("./structures/handlers/eventHandler"),
+  { loadConfig } = require("./structures/functions/configLoader");
 
 bot.config = require("./config.js");
+
 bot.logger = new Logger(); // client.logger.log('Client is Running!', ['CLIENT']);
 
 bot.events = new Collection();
@@ -26,11 +29,28 @@ bot.subCommands = new Collection();
 
 bot.guildConfig = new Collection();
 
-connect(bot.config.database, {}).then(() =>
-  bot.logger.log(`Database connected.`, ["CLIENT"])
-);
+connect(bot.config.database, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT"]))
+  .catch((err) => {
+    bot.logger.log("Unable to connect to the Mongodb database. Error:" + err, [
+      "CLIENT",
+    ]);
+  });
 
 loadEvents(bot);
 loadConfig(bot);
 
 bot.login(bot.config.token);
+
+bot
+  .on("disconnect", () => bot.logger.log("Bot is disconnecting...", ["WARN"]))
+  .on("reconnecting", () => bot.logger.log("Bot reconnecting...", ["CLIENT"]))
+  .on("error", (e) => bot.logger.log(e, ["ERROR"]))
+  .on("warn", (info) => bot.logger.log(info, ["WARN"]));
+
+process.on("unhandledRejection", (err) => {
+  console.error(err);
+});

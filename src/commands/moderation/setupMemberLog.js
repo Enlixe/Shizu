@@ -61,7 +61,7 @@ module.exports = {
     });
 
     const Embed = new EmbedBuilder()
-      .setColor("Green")
+      .setColor(bot.config.color.green)
       .setTitle("Member Log")
       .setDescription(
         [
@@ -69,7 +69,8 @@ module.exports = {
           `- Member Auto-Role: ${rMember ? `<@&${rMember}>` : "Off"}`,
           `- Bot Auto-Role: ${rBot ? `<@&${rBot}>` : "Off"}`,
         ].join("\n")
-      );
+      )
+      .setFooter({ text: bot.config.embed.footer });
     return interaction.reply({ embeds: [Embed] });
   },
 };

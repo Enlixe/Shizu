@@ -47,7 +47,7 @@ module.exports = {
 
     const errorsEmbed = new EmbedBuilder()
       .setAuthor({ name: "Couldn't timeout member due to" })
-      .setColor("Red");
+      .setColor(bot.config.color.red);
 
     if (!target)
       return interaction.reply({
@@ -105,7 +105,7 @@ module.exports = {
         name: "Timeout Issued",
         iconURL: guild.iconURL(),
       })
-      .setColor("Gold")
+      .setColor(bot.config.color.default)
       .setDescription(
         [
           `${target} was issued a timeout for **${ms(ms(duration), {
@@ -114,7 +114,8 @@ module.exports = {
           `bringing their infractions total to **${userData.Infractions.length}** points`,
           `\nReason: ${reason}`,
         ].join("\n")
-      );
+      )
+      .setFooter({ text: bot.config.embed.footer });
 
     return interaction.reply({ embeds: [successEmbed] });
   },

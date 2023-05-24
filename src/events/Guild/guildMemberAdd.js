@@ -74,7 +74,7 @@ module.exports = {
           `- Account Joined: <t:${joiningTime}:D> | <t:${joiningTime}:R>`,
         ].join("\n")
       )
-      .setFooter({ text: "Joined" })
+      .setFooter({ text: "Joined" + " | " + bot.config.embed.footer })
       .setTimestamp();
     if (risk == "Extreme" || risk == "High") {
       const Buttons = new ActionRowBuilder().addComponents(

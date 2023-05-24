@@ -31,7 +31,7 @@ module.exports = {
           `- Account Created: <t:${accountCreation}:D> | <t:${accountCreation}:R>`,
         ].join("\n")
       )
-      .setFooter({ text: "Left" })
+      .setFooter({ text: "Left" + " | " + bot.config.embed.footer })
       .setTimestamp();
 
     logChannel.send({ embeds: [Embed] });

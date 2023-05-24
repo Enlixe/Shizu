@@ -1,4 +1,8 @@
-const { ChatInputCommandInteraction, Client } = require("discord.js");
+const {
+  ChatInputCommandInteraction,
+  Client,
+  EmbedBuilder,
+} = require("discord.js");
 const { loadEvents } = require("../../../structures/handlers/eventHandler");
 
 module.exports = {
@@ -11,6 +15,13 @@ module.exports = {
     for (const [key, value] of bot.events)
       bot.removeListener(`${key}`, value, true);
     await loadEvents(bot);
-    return interaction.reply({ content: "Reloaded Events.", ephemeral: true });
+    return interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(bot.config.color.default)
+          .setDescription("Reloaded Events."),
+      ],
+      ephemeral: true,
+    });
   },
 };

@@ -24,7 +24,10 @@ async function loadCommands(bot) {
         commands.push({ Command: command.data.name, Status: "🟢" });
       }
     } catch (err) {
-      commands.push({ Command: f.split("/").pop().slice(0, -3), Status: "🔴" });
+      commands.push({
+        Command: f.split("/").pop().slice(0, -3),
+        Status: "🔴",
+      });
     }
   }
   await bot.application.commands.set(commandsArray);

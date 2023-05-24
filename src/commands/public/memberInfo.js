@@ -20,7 +20,7 @@ module.exports = {
   /**
    * @param {ChatInputCommandInteraction} interaction
    */
-  async execute(interaction) {
+  async execute(interaction, bot) {
     await interaction.deferReply({ ephemeral: true });
     const member =
       interaction.options.getMember("member") || interaction.member;
@@ -65,6 +65,7 @@ module.exports = {
           iconURL: member.displayAvatarURL(),
         })
         .setColor(member.displayColor)
+        .setFooter({ text: bot.config.embed.footer })
         .setDescription(
           `On <t:${joinTime}:D>, ${
             member.user.username
@@ -109,6 +110,7 @@ module.exports = {
       interaction.editReply({
         content: "An error occured: Contact The Developer",
       });
+      bot.logger.log(`Error occured at memberInfo.js: ` + err, ["COMMANDS"]);
     }
   },
 };

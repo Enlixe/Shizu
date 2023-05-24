@@ -3,6 +3,7 @@ const {
   PermissionFlagsBits,
   ChatInputCommandInteraction,
   EmbedBuilder,
+  Client,
 } = require("discord.js");
 
 module.exports = {
@@ -35,8 +36,9 @@ module.exports = {
     ),
   /**
    * @param {ChatInputCommandInteraction} interaction
+   * @param {Client} bot
    */
-  async execute(interaction) {
+  async execute(interaction, bot) {
     const { options, guild } = interaction;
 
     const amount = options.getNumber("amount");
@@ -46,10 +48,11 @@ module.exports = {
     const channelMessages = await interaction.channel.messages.fetch();
     const logChannel = guild.channels.cache.get("975294096895803402");
 
-    const Embed = new EmbedBuilder().setColor("DarkNavy");
+    const Embed = new EmbedBuilder().setColor(bot.config.color.default);
     const logEmbed = new EmbedBuilder()
-      .setColor("DarkAqua")
-      .setAuthor({ name: "Clear" });
+      .setColor(bot.config.color.default)
+      .setAuthor({ name: "Clear" })
+      .setFooter({ text: bot.config.embed.footer });
 
     let logEmbedDesc = [
       `- Moderator: ${interaction.member}`,

@@ -3,6 +3,7 @@ const {
   SlashCommandBuilder,
   PermissionFlagsBits,
   Client,
+  EmbedBuilder,
 } = require("discord.js");
 
 module.exports = {
@@ -28,6 +29,13 @@ module.exports = {
   execute(interaction, bot) {
     const events = interaction.options.getString("events");
     bot.emit(events, interaction.member);
-    interaction.reply({ content: `Emitted ${events}`, ephemeral: true });
+    interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(bot.config.color.default)
+          .setDescription(`Emitted ${events}`),
+      ],
+      ephemeral: true,
+    });
   },
 };

@@ -16,7 +16,7 @@ module.exports = {
     if (!splitArray[0] === "memberlogging") return;
 
     const member = (await interaction.guild.members.fetch()).get(splitArray[2]);
-    const Embed = new EmbedBuilder();
+    const Embed = new EmbedBuilder().setColor(bot.config.color.red);
     const errorArray = [];
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.KickMembers))
