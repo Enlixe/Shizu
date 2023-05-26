@@ -26,12 +26,18 @@ module.exports = {
       const scFile = bot.subCommands.get(
         `${interaction.commandName}.${subCommand}`
       );
-      if (!scFile)
-        return interaction.reply({
-          content: "This sub-command is outdated.",
-          ephemeral: true,
-        });
-      scFile.execute(interaction, bot);
+      if (!scFile) {
+        try {
+          cmd.execute(interaction, bot);
+        } catch (err) {
+          return interaction.reply({
+            content: "This sub-command is outdated.",
+            ephemeral: true,
+          });
+        }
+      } else {
+        scFile.execute(interaction, bot);
+      }
     } else cmd.execute(interaction, bot);
   },
 };
