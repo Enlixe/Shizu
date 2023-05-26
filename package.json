@@ -1,9 +1,11 @@
 {
-  "name": "shiro",
-  "version": "0.1.3",
+  "name": "shizu",
+  "version": "0.2.0",
   "description": "",
-  "main": "src/main.js",
-  "scripts": {},
+  "main": "src/Shizu.js",
+  "scripts": {
+    "dev": "node ."
+  },
   "author": "Enlixe",
   "license": "ISC",
   "dependencies": {
