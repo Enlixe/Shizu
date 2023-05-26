@@ -42,7 +42,7 @@ jobs:
           npm i
           fi
       - run: npm run build --if-present
-      - run: npm run dev
+      - run: npm run actions
         env:
           TOKEN: ${{ secrets.TOKEN }}
           MONGO_URI: ${{ secrets.MONGO_URI }}

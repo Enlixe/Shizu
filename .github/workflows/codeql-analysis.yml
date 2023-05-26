@@ -32,7 +32,7 @@ jobs:
           npm i
           fi
       - name: Build files
-        run: npm run dev
+        run: npm run actions
         env:
           TOKEN: ${{ secrets.TOKEN }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
