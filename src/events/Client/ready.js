@@ -14,7 +14,7 @@ module.exports = {
 
     loadCommands(bot);
 
-    connect(bot.config.database)
+    await connect(bot.config.database)
       .then(() =>
         bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT"])
       )
