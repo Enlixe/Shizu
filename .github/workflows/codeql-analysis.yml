@@ -33,6 +33,9 @@ jobs:
           fi
       - name: Build files
         run: npm run dev
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
       - name: Setup CodeQL
         uses: github/codeql-action/init@0225834cc549ee0ca93cb085b92954821a145866 # v2
         with:
