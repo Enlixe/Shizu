@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/Shizu.js",
   "scripts": {
-    "actions": "exit 1",
+    "actions": "exit 0",
     "dev": "node -r dotenv/config ."
   },
   "author": "Enlixe",
