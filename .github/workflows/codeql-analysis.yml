@@ -32,7 +32,7 @@ jobs:
           npm i
           fi
       - name: Build files
-        run: npm run build
+        run: npm run dev
       - name: Setup CodeQL
         uses: github/codeql-action/init@0225834cc549ee0ca93cb085b92954821a145866 # v2
         with:
