@@ -1,21 +1,17 @@
 const {
-  ButtonInteraction,
   EmbedBuilder,
+  ChatInputCommandInteraction,
   PermissionFlagsBits,
 } = require("discord.js");
 
 module.exports = {
-  name: "interactionCreate",
+  id: "memberlogging", // The buttons .setCustomId
+
   /**
-   * @param {ButtonInteraction} interaction
+   * @param {ChatInputCommandInteraction} interaction
    */
-  async execute(interaction) {
-    if (!interaction.isButton()) return;
-
-    const splitArray = interaction.customId.split(":");
-    if (!splitArray[0] === "memberlogging") return;
-
-    const member = (await interaction.guild.members.fetch()).get(splitArray[2]);
+  async execute(interaction, bot, args) {
+    const member = (await interaction.guild.members.fetch()).get(args[1]);
     const Embed = new EmbedBuilder().setColor(bot.config.color.red);
     const errorArray = [];
 
@@ -33,7 +29,7 @@ module.exports = {
         ephemeral: true,
       });
 
-    switch (splitArray[1]) {
+    switch (args[0]) {
       case "kick":
         member
           .kick(`Kicked by: ${interaction.user.tag} | Member Logging System `)

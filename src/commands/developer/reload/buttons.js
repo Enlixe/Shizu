@@ -3,22 +3,21 @@ const {
   Client,
   EmbedBuilder,
 } = require("discord.js");
-const { loadCommands } = require("../../../structures/handlers/commandHandler");
+const { loadButtons } = require("../../../structures/handlers/buttonHandler");
 
 module.exports = {
-  subCommand: "reload.commands",
+  subCommand: "reload.buttons",
   /**
    * @param {ChatInputCommandInteraction} interaction
    * @param {Client} bot
    */
   async execute(interaction, bot) {
-    await interaction.deferReply({ ephemeral: true });
-    await loadCommands(bot);
-    return interaction.editReply({
+    await loadButtons(bot);
+    return interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(bot.config.color.default)
-          .setDescription("Reloaded Commands."),
+          .setDescription("Reloaded Component: Buttons."),
       ],
       ephemeral: true,
     });
