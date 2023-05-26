@@ -19,7 +19,7 @@ async function loadEvents(bot) {
 
       events.push({ Event: event.name, Status: "🟢" });
     } catch (err) {
-      events.push({ Event: files.split("/").pop().slice(0, -3), Status: "🔴" });
+      events.push({ Event: f.split("/").pop().slice(0, -3), Status: "🔴" });
     }
   }
 
