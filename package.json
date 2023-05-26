@@ -1,16 +1,17 @@
 {
   "name": "shizu",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "",
   "main": "src/Shizu.js",
   "scripts": {
-    "dev": "node ."
+    "dev": "node -r dotenv/config ."
   },
   "author": "Enlixe",
   "license": "ISC",
   "dependencies": {
     "chalk": "4.0.0",
     "discord.js": "^14.11.0",
+    "dotenv": "^16.0.3",
     "glob": "^10.2.6",
     "moment": "^2.29.4",
     "mongoose": "^7.2.1"
