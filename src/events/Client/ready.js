@@ -14,10 +14,7 @@ module.exports = {
 
     loadCommands(bot);
 
-    connect(bot.config.database, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    connect(bot.config.database)
       .then(() =>
         bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT"])
       )
