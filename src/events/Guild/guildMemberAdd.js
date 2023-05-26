@@ -17,6 +17,10 @@ module.exports = {
   async execute(member, bot) {
     const guildConfig = bot.guildConfig.get(member.guild.id);
     if (!guildConfig) return;
+    const logChannel = (await member.guild.channels.fetch()).get(
+      guildConfig.logChannel
+    );
+    if (!logChannel) return;
 
     const guildRoles = member.guild.roles.cache;
     let assignedRole = member.user.bot
@@ -28,11 +32,6 @@ module.exports = {
       await member.roles
         .add(assignedRole)
         .catch(() => (assignedRole = "Failed due to role hierarchy."));
-
-    const logChannel = (await member.guild.channels.fetch()).get(
-      guildConfig.logChannel
-    );
-    if (!logChannel) return;
 
     let color = "#74e21e";
     let risk = "Fairly Safe";

@@ -6,6 +6,7 @@ const {
   EmbedBuilder,
 } = require("discord.js");
 const welcomeSchema = require("../../structures/schemas/welcomer");
+const { addConfig } = require("../../structures/functions/configLoader");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -29,6 +30,18 @@ module.exports = {
             .addChannelTypes(ChannelType.GuildText)
             .setRequired(true)
         )
+        .addStringOption((op) =>
+          op
+            .setName("message")
+            .setDescription(
+              "The welcome messages. (if not provided will set to default msg)"
+            )
+        )
+        .addStringOption((op) =>
+          op
+            .setName("attachment")
+            .setDescription("The welcome messages attachment.")
+        )
     ),
   /**
    * @param {ChatInputCommandInteraction} interaction
@@ -39,19 +52,37 @@ module.exports = {
     switch (sub) {
       case "welcome":
         const channel = interaction.options.getChannel("channel");
+        const msg = interaction.options.getString("message");
+        const attachment = interaction.options.getString("attachment");
         const joinSys = await welcomeSchema.findOne({
           Guild: interaction.guild.id,
         });
         if (!joinSys) {
           joinChannel = new welcomeSchema({
             Guild: interaction.guild.id,
-            Channel: channel.id,
+            welcomeChannel: channel.id,
+            welcomeMsg: msg,
+            welcomeAttchment: attachment,
+          });
+
+          addConfig(bot, interaction.guild.id, {
+            welcomeChannel: channel.id,
+            welcomeMsg: msg,
+            welcomeAttchment: attachment,
           });
 
           await joinChannel.save().catch((err) => console.log(err));
           const successEmbed = new EmbedBuilder()
             .setTitle("Welcomer")
-            .setDescription(`Enabled welcome message in **${channel}**!`)
+            .setDescription(
+              [
+                `Enabled welcome message in **${channel}**!`,
+                `\nMessage:`,
+                `\`\`\`${msg}\`\`\``,
+                "Attachment:",
+                `${attachment}`,
+              ].join("\n")
+            )
             .setColor(bot.config.color.default)
             .setFooter({ text: bot.config.embed.footer });
           await interaction.reply({
@@ -74,6 +105,11 @@ module.exports = {
             embeds: [successEmbed],
             ephemeral: true,
           });
+          addConfig(bot, interaction.guild.id, {
+            welcomeChannel: channel.id,
+            welcomeMsg: msg,
+            welcomeAttchment: attachment,
+          });
         }
         break;
       case "disable":
@@ -88,6 +124,11 @@ module.exports = {
         await interaction.reply({
           embeds: [successEmbed],
           ephemeral: true,
+        });
+        addConfig(bot, interaction.guild.id, {
+          welcomeChannel: null,
+          welcomeMsg: null,
+          welcomeAttchment: null,
         });
         break;
     }

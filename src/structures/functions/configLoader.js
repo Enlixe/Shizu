@@ -15,7 +15,9 @@ async function loadConfig(bot) {
   let welcomeC = new Collection();
   (await welcomer.find()).forEach((doc) => {
     welcomeC.set(doc.Guild, {
-      welcomeChannel: doc.Channel,
+      welcomeChannel: doc.welcomeChannel,
+      welcomeMsg: doc.welcomeMsg,
+      welcomeAttachment: doc.welcomeAttchment,
     });
   });
 
@@ -23,6 +25,13 @@ async function loadConfig(bot) {
   console.log(bot.guildConfig);
 
   return bot.logger.log("Loaded Guild Configs to the Collection.", ["CLIENT"]);
+}
+
+async function addConfig(bot, id, config) {
+  const { ...rest } = config;
+  const newConfig = new Collection([[id, rest]]);
+  bot.guildConfig = await mergeCollections(bot.guildConfig, newConfig);
+  return true;
 }
 
 function mergeCollections(...collections) {
@@ -46,4 +55,4 @@ function mergeCollections(...collections) {
   return mergedCollection;
 }
 
-module.exports = { loadConfig };
+module.exports = { loadConfig, addConfig };

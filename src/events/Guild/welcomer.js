@@ -11,21 +11,32 @@ module.exports = {
     if (!guildConfig) return;
 
     const channel = guildConfig.welcomeChannel;
+    if (!channel) return;
+
+    let msg = guildConfig.welcomeMsg;
+    let attachment = guildConfig.welcomeAttachment;
 
     const { user, guild } = member;
+
+    msg
+      ? null
+      : (msg = `Welcome ${user} to ${guild.name}.\nWe hope you enjoy your stay here!`);
+
+    let Embed = new EmbedBuilder()
+      .setAuthor({ name: `${user.username}`, iconURL: user.avatarURL() })
+      .setDescription(msg)
+      .setColor(bot.config.color.default)
+      .setFooter({
+        text: `${guild.name}`,
+        iconURL: guild.iconURL(),
+      })
+      .setTimestamp();
+
+    attachment ? Embed.setImage(attachment) : null;
+
     bot.channels.cache
       .get(channel)
-      .send({
-        embeds: [
-          new EmbedBuilder()
-            .setDescription(`**${user.username}** joined **${guild.name}**`)
-            .setColor(bot.config.color.default)
-            .setFooter({
-              text: `${guild.name} now has ${guild.memberCount} members`,
-              iconURL: guild.iconURL(),
-            }),
-        ],
-      })
+      .send({ content: `${user}`, embeds: [Embed] })
       .catch((err) => {
         console.log(err);
       });

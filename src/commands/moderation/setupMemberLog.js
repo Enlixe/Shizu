@@ -5,8 +5,13 @@ const {
   ChatInputCommandInteraction,
   Client,
   EmbedBuilder,
+  Collection,
 } = require("discord.js");
 const DB = require("../../structures/schemas/memberLog");
+const {
+  loadConfig,
+  addConfig,
+} = require("../../structures/functions/configLoader");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -54,7 +59,7 @@ module.exports = {
       { new: true, upsert: true }
     );
 
-    bot.guildConfig.set(guild.id, {
+    addConfig(bot, guild.id, {
       logChannel: logChannel,
       roleMember: rMember,
       roleBot: rBot,

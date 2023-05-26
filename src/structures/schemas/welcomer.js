@@ -4,6 +4,8 @@ module.exports = model(
   "Welcomer",
   new Schema({
     Guild: String,
-    Channel: String,
+    welcomeChannel: String,
+    welcomeMsg: String,
+    welcomeAttchment: String,
   })
 );
