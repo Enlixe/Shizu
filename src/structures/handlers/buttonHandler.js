@@ -4,7 +4,8 @@ async function loadButtons(bot) {
   console.time("[HANDLER] - Loaded Buttons");
   const buttons = new Array();
 
-  bot.buttons = new Map();
+  await bot.buttons.clear();
+
   const files = await loadFiles("buttons");
 
   for (const f of files) {
