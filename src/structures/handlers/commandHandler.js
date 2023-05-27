@@ -16,13 +16,17 @@ async function loadCommands(bot) {
       const command = require(f);
 
       if (command.subCommand) bot.subCommands.set(command.subCommand, command);
-      else {
+      // else {
+      else if (command.data) {
         bot.commands.set(command.data.name, command);
-
         commandsArray.push(command.data.toJSON());
-
         commands.push({ Command: command.data.name, Status: "🟢" });
+      } else if (command.name) {
+        bot.commands.set(command.name, command);
+        commandsArray.push(command);
+        commands.push({ Command: command.name, Status: "🟢" });
       }
+      // }
     } catch (err) {
       commands.push({
         Command: f.split("/").pop().slice(0, -3),

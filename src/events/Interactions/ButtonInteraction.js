@@ -16,6 +16,8 @@ module.exports = {
 
     const id = Button.id.split(":");
     if (id[1]) Button.execute(interaction, bot, buttonCustomId.slice(2));
-    else Button.execute(interaction, bot, buttonCustomId.slice(1));
+    else if (buttonCustomId.slice(1) !== null)
+      Button.execute(interaction, bot, buttonCustomId.slice(1));
+    else if (!buttonCustomId.slice(1)) Button.execute(interaction, bot);
   },
 };

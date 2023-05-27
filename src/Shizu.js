@@ -12,6 +12,7 @@ const bot = new Client({
   partials: [User, Message, GuildMember, ThreadMember],
 });
 
+const { connect } = require("mongoose");
 const Logger = require("./structures/functions/logger"),
   { loadConfig } = require("./structures/functions/configLoader"),
   { loadEvents } = require("./structures/handlers/eventHandler"),
@@ -27,8 +28,20 @@ bot.guildConfig = new Collection();
 bot.logger = new Logger(); // client.logger.log('Client is Running!', ['CLIENT']);
 bot.config = require("./config.js");
 
-bot.login(bot.config.token).then(() => {
+bot.login(bot.config.token).then(async () => {
   loadEvents(bot);
   loadButtons(bot);
-  loadConfig(bot);
+
+  await connect(bot.config.database)
+    .then(() =>
+      bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT"])
+    )
+    .catch((err) => {
+      bot.logger.log(
+        "Unable to connect to the Mongodb database. Error: " + err,
+        ["CLIENT"]
+      );
+    });
+
+  await loadConfig(bot);
 });

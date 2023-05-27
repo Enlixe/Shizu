@@ -1,5 +1,4 @@
 const { Client } = require("discord.js");
-const { connect } = require("mongoose");
 const { loadCommands } = require("../../structures/handlers/commandHandler");
 
 module.exports = {
@@ -13,17 +12,6 @@ module.exports = {
     bot.user.setActivity(`with ${bot.guilds.cache.size} guilds`);
 
     loadCommands(bot);
-
-    await connect(bot.config.database)
-      .then(() =>
-        bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT"])
-      )
-      .catch((err) => {
-        bot.logger.log(
-          "Unable to connect to the Mongodb database. Error:" + err,
-          ["CLIENT"]
-        );
-      });
 
     bot
       .on("disconnect", () =>
