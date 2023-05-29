@@ -14,6 +14,7 @@ const {
 } = require("../../structures/functions/configLoader");
 
 module.exports = {
+  folder: "moderation",
   data: new SlashCommandBuilder()
     .setName("setup_memberlog")
     .setDescription("Configure the member logging system for this guild.")

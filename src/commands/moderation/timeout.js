@@ -9,6 +9,7 @@ const DB = require("../../structures/schemas/infractions");
 const ms = require("ms");
 
 module.exports = {
+  folder: "moderation",
   data: new SlashCommandBuilder()
     .setName("timeout")
     .setDescription("Restrict a member's ability to communicate.")

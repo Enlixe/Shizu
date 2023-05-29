@@ -55,7 +55,7 @@ module.exports = {
         });
 
       return {
-        directory: formatString(dir),
+        directory: dir ? formatString(dir) : "Not set",
         commands: getCmds,
       };
     });

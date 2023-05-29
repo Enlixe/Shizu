@@ -33,9 +33,11 @@ function fetch(channel, msg) {
 }
 
 module.exports = {
+  folder: "developer",
   developer: true,
   default_member_permissions: PermissionFlagsBits.ManageGuild,
   dm_permission: false,
+
   name: "embed",
   description: "Tools to create embeds.",
   options: [

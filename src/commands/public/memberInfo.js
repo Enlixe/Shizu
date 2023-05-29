@@ -6,6 +6,7 @@ const {
 } = require("discord.js");
 
 module.exports = {
+  folder: "information",
   data: new SlashCommandBuilder()
     .setName("memberinfo")
     .setDescription("View your or any member's information.")
