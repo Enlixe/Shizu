@@ -6,7 +6,7 @@ A moderation, anime, and fun bot
 
 ☄️ Fast | ☁️ Clean | 🌸 Beautiful | 🌙 99% Uptime
 
-![Github Issues](https://img.shields.io/github/issues/Enlixe/Shizu?color=red&style=for-the-badge) ![Github License](https://img.shields.io/github/license/Enlixe/Shizu?color=black&style=for-the-badge) ![Maintenance](https://img.shields.io/maintenance/yes/2023?color=ff69b4&style=for-the-badge) ![Last Commit](https://img.shields.io/github/last-commit/Enlixe/Shizu?style=for-the-badge)
+![Github Issues](https://img.shields.io/github/issues/Enlixe/Shizu?color=red&style=for-the-badge) ![Github License](https://img.shields.io/github/license/Enlixe/Shizu?color=black&style=for-the-badge) ![Maintenance](https://img.shields.io/maintenance/yes/2023?color=ff69b4&style=for-the-badge)
 
 ---
 
@@ -57,4 +57,5 @@ All merge requests are welcome!
 ## Links
 
 Join the [Community Server](https://enlixe.github.io/l/dc "Community Server")
+
 My [GitHub](https://github.com/Enlixe/ "GitHub")
