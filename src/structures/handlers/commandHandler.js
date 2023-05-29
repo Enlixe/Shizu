@@ -28,6 +28,7 @@ async function loadCommands(bot) {
       }
       // }
     } catch (err) {
+      bot.logger.log(`Error in commands, error: ` + err, ["COMMAND"]);
       commands.push({
         Command: f.split("/").pop().slice(0, -3),
         Status: "🔴",

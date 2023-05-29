@@ -7,6 +7,7 @@ const {
 } = require("discord.js");
 
 module.exports = {
+  folder: "moderation",
   data: new SlashCommandBuilder()
     .setName("clear")
     .setDescription("Bulk delete messages.")

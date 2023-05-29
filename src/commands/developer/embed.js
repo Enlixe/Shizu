@@ -9,6 +9,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ApplicationCommandOptionType,
+  PermissionFlagsBits,
 } = require("discord.js");
 
 const { error } = require("../../structures/utils/embedCommand");
@@ -32,6 +33,9 @@ function fetch(channel, msg) {
 }
 
 module.exports = {
+  developer: true,
+  default_member_permissions: PermissionFlagsBits.ManageGuild,
+  dm_permission: false,
   name: "embed",
   description: "Tools to create embeds.",
   options: [
