@@ -35,12 +35,15 @@ bot.login(bot.config.token).then(async () => {
 
   await connect(bot.config.database)
     .then(() =>
-      bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT"])
+      bot.logger.log(`Connected to the Mongodb database.`, [
+        "CLIENT",
+        "DATABASE",
+      ])
     )
     .catch((err) => {
       bot.logger.log(
         "Unable to connect to the Mongodb database. Error: " + err,
-        ["CLIENT"]
+        ["CLIENT", "DATABASE"]
       );
     });
 

@@ -22,9 +22,11 @@ async function loadConfig(bot) {
   });
 
   bot.guildConfig = await mergeCollections(welcomeC, memberLogC);
-  console.log(bot.guildConfig);
 
-  return bot.logger.log("Loaded Guild Configs to the Collection.", ["CLIENT"]);
+  return bot.logger.log("Loaded Guild Configs to the Collection.", [
+    "CLIENT",
+    "DATABASE",
+  ]);
 }
 
 async function addConfig(bot, id, config) {
