@@ -86,6 +86,7 @@ module.exports = {
     });
 
     const infractions = {
+      Type: "Timeout",
       IssuerID: member.id,
       IssuerName: member.user.username,
       Reason: reason,
