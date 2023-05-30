@@ -75,6 +75,7 @@ module.exports = {
         new StringSelectMenuBuilder()
           .setCustomId("help")
           .setPlaceholder("Find category")
+          .setDisabled(state)
           .addOptions(
             categories.map((cmd) => {
               return {
@@ -99,6 +100,7 @@ module.exports = {
     const collector = channel.createMessageComponentCollector({
       filter,
       componentType: ComponentType.StringSelect,
+      time: 60000,
     });
 
     collector.on("collect", (interaction) => {
@@ -132,31 +134,5 @@ module.exports = {
     collector.on("end", () => {
       initEmbed.edit({ components: components(true) });
     });
-
-    // const directories = await fs.readdirSync("./commands/slash/");
-    // const row = new ActionRowBuilder().addComponents(
-    //   new StringSelectMenuBuilder()
-    //     .setCustomId("slashHelpSelect")
-    //     .setPlaceholder("Select a category")
-    //     .addOptions(
-    //       directories.map((dir) => {
-    //         return { label: dir, value: dir };
-    //       })
-    //     )
-    // );
-
-    // const embed = new EmbedBuilder()
-    //   .setTitle("Help")
-    //   .setDescription("Select a category from the dropdown")
-    //   .setColor(client.color.main)
-    //   .setTimestamp();
-
-    // interaction
-    //   .reply({ embeds: [embed], components: [row] })
-    //   .then((message) => {
-    //     setTimeout(() => {
-    //       interaction.editReply({ components: [] });
-    //     }, 30 * 1000);
-    //   });
   },
 };
