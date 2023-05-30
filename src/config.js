@@ -1,4 +1,10 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+} = require("discord.js");
+require("dotenv").config();
 
 module.exports = {
   token: process.env.TOKEN,
@@ -12,4 +18,18 @@ module.exports = {
   embed: {
     footer: "Shizu | シズ", // And the default footer for the embeds
   },
+  fromServer,
 };
+
+/**
+ * @param {EmbedBuilder} embed
+ */
+function fromServer(server) {
+  return new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("server")
+      .setLabel("Sent from server: " + server)
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true)
+  );
+}
