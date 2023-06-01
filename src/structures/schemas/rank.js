@@ -9,5 +9,6 @@ module.exports = model(
     },
     logChannel: { type: String },
     roles: { type: Array },
+    notification: { type: Boolean, default: true },
   })
 );

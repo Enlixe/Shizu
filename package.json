@@ -1,6 +1,6 @@
 {
   "name": "shizu",
-  "version": "0.3.0-beta.3",
+  "version": "0.3.0-beta.5",
   "description": "",
   "main": "src/Shizu.js",
   "scripts": {

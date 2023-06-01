@@ -44,33 +44,6 @@ module.exports = {
         let msg = `Congratulations <@${message.author.id}>, you just leveled up to level ${level}. <:ztlove:1109689251781677068>`;
 
         const Rank = await RankLog.findOne({ Guild: message.guild.id });
-        if (Rank.logChannel) {
-          try {
-            let notificationChannel = await client.channels.fetch(
-              Rank.logChannel
-            );
-
-            const embed = new EmbedBuilder()
-              .setTitle("🎉 Congratulations 🎉")
-              .setThumbnail(message.author.avatarURL({ dynamic: true }))
-              .addFields(
-                {
-                  name: "User:",
-                  value: `${message.author.username}`,
-                  inline: true,
-                },
-                { name: "Level:", value: `${level}`, inline: true },
-                {
-                  name: "Check the leaderboard using:",
-                  value: `\`/rank leadearboard\``,
-                }
-              )
-              .setColor(user.hexAccentColor || "Random");
-
-            notificationChannel.send({ embeds: [embed] });
-          } catch (err) {}
-        }
-
         //* Give role
         let roles = Rank.roles.find((r) => r.level === level);
         if (roles.role) {
@@ -79,8 +52,33 @@ module.exports = {
             msg +
             `\nAnd you've got the <@&${roles.role}> role! <:yaeheart:1109686395200602212>`;
         }
+        if (Rank.logChannel) {
+          let notificationChannel = await client.channels.fetch(
+            Rank.logChannel
+          );
 
-        message.channel.send(msg);
+          const embed = new EmbedBuilder()
+            .setTitle("🎉 Congratulations 🎉")
+            .setThumbnail(message.author.avatarURL({ dynamic: true }))
+            .addFields(
+              {
+                name: "User:",
+                value: `${message.author.username}`,
+                inline: true,
+              },
+              { name: "Level:", value: `${level}`, inline: true },
+              {
+                name: "Check the leaderboard using:",
+                value: `\`/rank leadearboard\``,
+              }
+            )
+            .setColor(user.hexAccentColor || "Random");
+
+          notificationChannel.send({ embeds: [embed] });
+        }
+        if (Rank.notification) {
+          message.channel.send(msg);
+        }
 
         await UserDB.updateOne({ Guild, User }, { level, xp });
       }
