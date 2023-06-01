@@ -2,9 +2,9 @@
 
 Here are the codes for Shizu Bot! Feel free to submit an issue or open a pull request!
 
-A moderation, anime, and fun bot
+A moderation, anime, and fun bot, to fill your sever with more utility command and more fun.
 
-☄️ Fast | ☁️ Clean | 🌸 Beautiful | 🌙 99% Uptime
+`☄️ Fast` || `☁️ Clean` || `🌸 Beautiful` || `🌙 99% Uptime`
 
 ![Github Issues](https://img.shields.io/github/issues/Enlixe/Shizu?color=red&style=for-the-badge) ![Github License](https://img.shields.io/github/license/Enlixe/Shizu?color=black&style=for-the-badge) ![Maintenance](https://img.shields.io/maintenance/yes/2023?color=ff69b4&style=for-the-badge)
 
