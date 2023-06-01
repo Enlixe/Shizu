@@ -42,6 +42,10 @@ module.exports = {
         ++level;
         xp = 0;
 
+        message.channel.send(
+          `Congratulations <@${message.author.id}>, you just leveled up to level ${level}. <:ztlove:1109689251781677068>`
+        );
+
         let notificationChannel = null;
         const logChannel = await RankLog.findOne({ Guild: message.guild.id });
         if (logChannel) {
