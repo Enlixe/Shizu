@@ -11,7 +11,7 @@ const { addConfig } = require("../../structures/functions/configLoader");
 module.exports = {
   folder: "moderation",
   data: new SlashCommandBuilder()
-    .setName("setup_welcomer")
+    .setName("welcomer")
     .setDescription("Configure the welcomer system for this guild.")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setDMPermission(false)

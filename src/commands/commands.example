@@ -1,0 +1,40 @@
+const {
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+  Client
+} = require("discord.js");
+
+module.exports = {
+  folder: "EXAMPLE",
+  data: new SlashCommandBuilder()
+    .setName("EXAMPLE")
+    .setDescription("EXAMPLE"),
+  /**
+   * @param {ChatInputCommandInteraction} interaction
+   * @param {Client} bot
+   */
+  execute(interaction, bot) {
+    return interaction.reply({ content: "Pong.", ephemeral: true });
+  },
+};
+
+
+
+const {
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+  Client
+} = require("discord.js");
+
+module.exports = {
+  folder: "EXAMPLE",
+  name: "EXAMPLE",
+  description: "EXAMPLE",
+  /**
+   * @param {ChatInputCommandInteraction} interaction
+   * @param {Client} bot
+   */
+  execute(interaction, bot) {
+    return interaction.reply({ content: "Pong.", ephemeral: true });
+  },
+};
