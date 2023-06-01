@@ -1,6 +1,6 @@
 const { EmbedBuilder, Client, Message } = require("discord.js");
 const UserDB = require("../../structures/schemas/user");
-const RankLog = require("../../structures/schemas/rankLog");
+const RankLog = require("../../structures/schemas/rank");
 
 const cooldown = new Set();
 
@@ -9,7 +9,6 @@ module.exports = {
   /**
    * @param {Message} message
    * @param {Client} client
-   * @returns
    */
   async execute(message, client) {
     const Guild = message.guild.id;
@@ -30,15 +29,8 @@ module.exports = {
       );
 
       user = await UserDB.findOneAndUpdate(
-        {
-          Guild,
-          User,
-        },
-        {
-          Guild,
-          User,
-          $inc: { xp: xpAmount },
-        },
+        { Guild, User },
+        { Guild, User, $inc: { xp: xpAmount } },
         { upsert: true, new: true }
       );
 
@@ -49,54 +41,48 @@ module.exports = {
         ++level;
         xp = 0;
 
-        message.channel.send(
-          `Congratulations <@${message.author.id}>, you just leveled up to level ${level}. <:ztlove:1109689251781677068>`
-        );
+        let msg = `Congratulations <@${message.author.id}>, you just leveled up to level ${level}. <:ztlove:1109689251781677068>`;
 
-        let notificationChannel = null;
-        const logChannel = await RankLog.findOne({ Guild: message.guild.id });
-        if (logChannel) {
+        const Rank = await RankLog.findOne({ Guild: message.guild.id });
+        if (Rank.logChannel) {
           try {
-            notificationChannel = await client.channels.fetch(
-              logChannel.logChannel
+            let notificationChannel = await client.channels.fetch(
+              Rank.logChannel
             );
-          } catch (err) {
-            console.log(err);
-          }
+
+            const embed = new EmbedBuilder()
+              .setTitle("🎉 Congratulations 🎉")
+              .setThumbnail(message.author.avatarURL({ dynamic: true }))
+              .addFields(
+                {
+                  name: "User:",
+                  value: `${message.author.username}`,
+                  inline: true,
+                },
+                { name: "Level:", value: `${level}`, inline: true },
+                {
+                  name: "Check the leaderboard using:",
+                  value: `\`/rank leadearboard\``,
+                }
+              )
+              .setColor(user.hexAccentColor || "Random");
+
+            notificationChannel.send({ embeds: [embed] });
+          } catch (err) {}
         }
-        if (!notificationChannel) {
-          notificationChannel = message.channel;
+
+        //* Give role
+        let roles = Rank.roles.find((r) => r.level === level);
+        if (roles.role) {
+          message.member.roles.add(roles.role);
+          msg =
+            msg +
+            `\nAnd you've got the <@&${roles.role}> role! <:yaeheart:1109686395200602212>`;
         }
 
-        const embed = new EmbedBuilder()
-          .setTitle("🎉 Congratulations 🎉")
-          .setThumbnail(message.author.avatarURL({ dynamic: true }))
-          .addFields(
-            {
-              name: "User:",
-              value: `${message.author.username}`,
-              inline: true,
-            },
-            { name: "Level:", value: `${level}`, inline: true },
-            {
-              name: "Check the leaderboard using:",
-              value: `\`/rank leadearboard\``,
-            }
-          )
-          .setColor(user.hexAccentColor || "Random");
+        message.channel.send(msg);
 
-        notificationChannel.send({ embeds: [embed] });
-
-        await UserDB.updateOne(
-          {
-            Guild,
-            User,
-          },
-          {
-            level,
-            xp,
-          }
-        );
+        await UserDB.updateOne({ Guild, User }, { level, xp });
       }
     } catch (err) {
       console.log(err);

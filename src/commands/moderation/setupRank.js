@@ -8,7 +8,7 @@ const {
 } = require("discord.js");
 const { Rank } = require("canvacord");
 const UserDB = require("../../structures/schemas/user");
-const RankLog = require("../../structures/schemas/rankLog");
+const RankLog = require("../../structures/schemas/rank");
 const AsciiTable = require("ascii-table");
 const table = new AsciiTable().setHeading("#", "User", "Level", "XP");
 
@@ -27,6 +27,26 @@ module.exports = {
               "📌 The channel where the notifications will be sent."
             )
             .addChannelTypes(ChannelType.GuildText)
+            .setRequired(true)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("role")
+        .setDescription("Add role rewards to user when reached specific level.")
+        .addIntegerOption((option) =>
+          option
+            .setName("level")
+            .setDescription("Specificy the level needed to get the role.")
+            .setMinValue(1)
+            .setRequired(true)
+        )
+        .addRoleOption((option) =>
+          option
+            .setName("roles")
+            .setDescription(
+              "Role to be given then the user reach specified level."
+            )
             .setRequired(true)
         )
     )
@@ -183,11 +203,6 @@ module.exports = {
               name: "Channel",
               value: `<#${channel.id}>`,
               inline: true,
-            },
-            {
-              name: `Made by:`,
-              value: `**<@1049620709569216543>**`,
-              inline: true,
             }
           )
           .setTimestamp();
@@ -203,6 +218,72 @@ module.exports = {
         if (!savedChannelDB) {
           return interaction.reply({
             content: "An error occurred while saving the Ranking channel",
+            ephemeral: true,
+          });
+        }
+        break;
+      case "role":
+        if (
+          !interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)
+        )
+          return interaction.reply({
+            content: "You don't have permissions to use this command",
+            ephemeral: true,
+          });
+        let role = options.getRole("roles");
+        role.id;
+        const level = options.getInteger("level");
+
+        let getRank = await RankLog.findOne({ Guild: guild.id }, { roles: [] });
+        const newRole = { level, role };
+
+        if (!getRank) {
+          let newRoleDB = new RankLog({
+            Guild: guild.id,
+            roles: [newRole],
+          });
+          await newRoleDB.save();
+
+          const embed = new EmbedBuilder()
+            .setColor(client.config.color.default)
+            .setDescription("Created level roles for this server.")
+            .addFields({
+              name: `Level: ${level}`,
+              value: `Role: ${role}`,
+            })
+            .setFooter({ text: client.config.embed.footer })
+            .setTimestamp();
+
+          return interaction.reply({
+            embeds: [embed],
+            ephemeral: true,
+          });
+        } else {
+          await RankLog.findOneAndUpdate(
+            { Guild: guild.id },
+            { $push: { roles: newRole } },
+            { upsert: true, new: true }
+          );
+
+          let embed = new EmbedBuilder()
+            .setColor(client.config.color.default)
+            .setDescription(
+              "Added new level roles for this server.\nNow the level role list are:"
+            )
+            .setFooter({ text: client.config.embed.footer })
+            .setTimestamp();
+
+          await RankLog.findOne({ Guild: guild.id });
+          let roles = Rank.roles;
+          roles.forEach((r) => {
+            embed.addFields({
+              name: `Level: ${r.level}`,
+              value: `Role: ${r.role}`,
+            });
+          });
+
+          return interaction.reply({
+            embeds: [embed],
             ephemeral: true,
           });
         }
