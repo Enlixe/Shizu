@@ -18,7 +18,7 @@ module.exports = {
     .setDescription("⚙ Configure the ranking system o Check your rank")
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("setup")
+        .setName("log")
         .setDescription("🛠 Let's start configuring the System.")
         .addChannelOption((option) =>
           option
@@ -153,7 +153,7 @@ module.exports = {
           interaction.reply({ embeds: [embed] });
         }
         break;
-      case "setup":
+      case "log":
         const channel = options.getChannel("channel");
 
         if (
@@ -164,62 +164,52 @@ module.exports = {
             ephemeral: true,
           });
 
+        let embed = new EmbedBuilder()
+          .setColor(client.config.color.default)
+          .setFooter({ text: client.config.embed.footer })
+          .setTimestamp();
+
         const channelDB = await RankLog.findOne(
           { Guild: guild.id },
-          {
-            logChannel: channel.id,
-          }
+          { logChannel: channel.id }
         );
 
         if (channelDB) {
-          const error = new EmbedBuilder()
-            .setThumbnail(client.user.displayAvatarURL())
-            .setColor("Red")
-            .addFields(
-              {
-                name: "🔹 The Ranking channel is already set up",
-                value: `It's set up in: <#${channelDB.channel}>`,
-              },
-              {
-                name: "🔹 If you want to change it, use:",
-                value: `\`/rank delete\``,
-              }
-            );
+          await RankLog.findOneAndReplace(
+            { Guild: guild.id },
+            { logChannel: channel.id }
+          );
 
-          return interaction.reply({
-            embeds: [error],
-            ephemeral: true,
-          });
-        }
-
-        const embed2 = new EmbedBuilder()
-          .setColor("Random")
-          .addFields(
+          embed.addFields(
             {
-              name: "🔹 You've just set up the Ranking channel",
+              name: "You've updated the rank log channel",
               value: `Moderator: <@${interaction.member.id}>`,
             },
             {
               name: "Channel",
               value: `<#${channel.id}>`,
-              inline: true,
             }
-          )
-          .setTimestamp();
+          );
 
-        interaction.reply({ embeds: [embed2] });
+          interaction.reply({ embeds: [embed] });
+        } else {
+          await RankLog.findOneAndUpdate(
+            { Guild: guild.id },
+            { logChannel: channel.id }
+          );
 
-        const newChannelDB = new RankLog({
-            Guild: guild.id,
-            logChannel: channel.id,
-          }),
-          savedChannelDB = await newChannelDB.save();
+          embed.addFields(
+            {
+              name: "You've just set up the rank log channel",
+              value: `Moderator: <@${interaction.member.id}>`,
+            },
+            {
+              name: "Channel",
+              value: `<#${channel.id}>`,
+            }
+          );
 
-        if (!savedChannelDB) {
-          return interaction.reply({
-            content: "An error occurred while saving the Ranking channel",
-            ephemeral: true,
-          });
+          interaction.reply({ embeds: [embed] });
         }
         break;
       case "role":
@@ -246,12 +236,12 @@ module.exports = {
 
           const embed = new EmbedBuilder()
             .setColor(client.config.color.default)
+            .setFooter({ text: client.config.embed.footer })
             .setDescription("Created level roles for this server.")
             .addFields({
               name: `Level: ${level}`,
               value: `Role: ${role}`,
             })
-            .setFooter({ text: client.config.embed.footer })
             .setTimestamp();
 
           return interaction.reply({
