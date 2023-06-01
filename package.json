@@ -1,11 +1,11 @@
 {
   "name": "shizu",
-  "version": "0.3.0-beta.6",
+  "version": "0.3.0",
   "description": "",
   "main": "src/Shizu.js",
   "scripts": {
     "actions": "exit 0",
-    "dev": "node -r dotenv/config ."
+    "dev": "node ."
   },
   "author": "Enlixe",
   "license": "ISC",
