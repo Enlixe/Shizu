@@ -16,7 +16,7 @@ const {
 module.exports = {
   folder: "moderation",
   data: new SlashCommandBuilder()
-    .setName("setup_memberlog")
+    .setName("memberlog")
     .setDescription("Configure the member logging system for this guild.")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setDMPermission(false)

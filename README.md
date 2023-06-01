@@ -17,7 +17,7 @@ A moderation, anime, and fun bot, to fill your sever with more utility command a
 - 📝 | Utilities commands
 - 😆 | Fun <sup>`MORE TBA`
 - 💵 | Economy <sup>`COMING SOON`
-- 📈 | Leveling <sup>`COMING SOON`
+- 📈 | Leveling <sup>`BETA`
 <!-- - And much more coming [soon](#) 🎊 -->
 
 ---
