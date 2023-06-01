@@ -7,7 +7,7 @@ const {
 const Rank = require("../../../structures/schemas/rank");
 
 module.exports = {
-  subCommand: "rank.role",
+  subCommand: "rank.role_remove",
   /**
    * @param {ChatInputCommandInteraction} interaction
    * @param {Client} bot
@@ -21,39 +21,43 @@ module.exports = {
 
     const { options, guild } = interaction;
 
-    const role = options.getRole("roles").id;
     const level = options.getInteger("level");
-    const newRole = { level, role };
 
     let embed = new EmbedBuilder()
       .setColor(bot.config.color.default)
       .setFooter({ text: bot.config.embed.footer })
       .setTimestamp();
 
-    let getRank = await Rank.findOne({ Guild: guild.id }, { roles: [] });
-    if (!getRank) {
-      let newRoleDB = new Rank({
-        Guild: guild.id,
-        roles: [newRole],
+    let Roles = await Rank.findOne({ Guild: guild.id });
+    if (!Roles) {
+      Roles = Roles.roles;
+      Roles.forEach((r) => {
+        embed.addFields({
+          name: `Level: ${r.level}`,
+          value: `Role:  <@&${r.role}>`,
+        });
       });
-      await newRoleDB.save();
-
       return interaction.reply({
-        embeds: [
-          embed
-            .setDescription("Created level roles for this server.")
-            .addFields({
-              name: `Level: ${level}`,
-              value: `Role: <@&${role}>`,
-            }),
-        ],
+        embeds: [embed.setDescription("There's no role to remove.")],
         ephemeral: true,
       });
-    } else {
+    }
+
+    let roleLevel;
+    let roleName;
+    Roles = Roles.roles;
+    await Roles.forEach((r) => {
+      if (r.level === level) {
+        roleLevel = r.level;
+        roleName = r.name;
+      }
+    });
+
+    if (roleLevel === level) {
       await Rank.findOneAndUpdate(
         { Guild: guild.id },
-        { $push: { roles: newRole } },
-        { upsert: true, new: true }
+        { $pull: { roles: { level: level, role: roleName } } },
+        { safe: true, multi: true }
       );
 
       let Roles = await Rank.findOne({ Guild: guild.id });
@@ -68,7 +72,25 @@ module.exports = {
       return interaction.reply({
         embeds: [
           embed.setDescription(
-            "Added new level roles for this server.\nNow the level role list are:"
+            "**Removed a role in the server level roles.**\nNow the level role list are:"
+          ),
+        ],
+        ephemeral: true,
+      });
+    } else {
+      let Roles = await Rank.findOne({ Guild: guild.id });
+      Roles = Roles.roles;
+      await Roles.forEach((r) => {
+        embed.addFields({
+          name: `Level: ${r.level}`,
+          value: `Role:  <@&${r.role}>`,
+        });
+      });
+
+      return interaction.reply({
+        embeds: [
+          embed.setDescription(
+            `**There's no role with level \`${level}\` to remove.**`
           ),
         ],
         ephemeral: true,

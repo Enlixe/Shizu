@@ -1,16 +1,4 @@
-const {
-  AttachmentBuilder,
-  SlashCommandBuilder,
-  ChannelType,
-  EmbedBuilder,
-  PermissionFlagsBits,
-  ChatInputCommandInteraction,
-} = require("discord.js");
-const { Rank } = require("canvacord");
-const UserDB = require("../../../structures/schemas/user");
-const RankLog = require("../../../structures/schemas/rank");
-const AsciiTable = require("ascii-table");
-const table = new AsciiTable().setHeading("#", "User", "Level", "XP");
+const { SlashCommandBuilder, ChannelType } = require("discord.js");
 
 module.exports = {
   folder: "moderation",
@@ -59,24 +47,45 @@ module.exports = {
             .addChannelTypes(ChannelType.GuildText)
         )
     )
-    .addSubcommand((subcommand) =>
-      subcommand
+    .addSubcommandGroup((group) =>
+      group
         .setName("role")
         .setDescription("Add role rewards to user when reached specific level.")
-        .addIntegerOption((option) =>
-          option
-            .setName("level")
-            .setDescription("Specificy the level needed to get the role.")
-            .setMinValue(1)
-            .setRequired(true)
-        )
-        .addRoleOption((option) =>
-          option
-            .setName("roles")
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName("role_add")
             .setDescription(
-              "Role to be given then the user reach specified level."
+              "Add role rewards to user when reached specific level."
             )
-            .setRequired(true)
+            .addIntegerOption((option) =>
+              option
+                .setName("level")
+                .setDescription("Specificy the level needed to get the role.")
+                .setMinValue(1)
+                .setRequired(true)
+            )
+            .addRoleOption((option) =>
+              option
+                .setName("roles")
+                .setDescription(
+                  "Role to be given then the user reach specified level."
+                )
+                .setRequired(true)
+            )
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName("role_remove")
+            .setDescription(
+              "Remove role rewards to user when reached specific level."
+            )
+            .addIntegerOption((option) =>
+              option
+                .setName("level")
+                .setDescription("Specificy the level needed to get the role.")
+                .setMinValue(1)
+                .setRequired(true)
+            )
         )
     ),
 };
