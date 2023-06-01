@@ -80,12 +80,13 @@ module.exports = {
           };
         }
 
+        let xpFormula = client.config.xpFormula(user.level);
         const rank = new Rank()
           .setAvatar(member.user.displayAvatarURL())
           .setCurrentXP(user.xp)
           .setLevel(user.level)
           .setRank(0, 0, false)
-          .setRequiredXP(user.level * 100)
+          .setRequiredXP(xpFormula)
           .setStatus(member.presence.status)
           .setProgressBar("#75ff7e", "COLOR")
           .setUsername(member.user.username)

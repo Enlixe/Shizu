@@ -20,8 +20,14 @@ module.exports = {
 
     let user;
 
+    const cdRand = Math.floor(Math.random() * 45) + 1;
+
     try {
-      const xpAmount = Math.floor(Math.random() * (25 - 15 + 1) + 15);
+      const xpLevel = (await UserDB.findOne({ Guild, User })).level;
+      const xpAmount = Math.floor(
+        Math.random() * (Math.pow(xpLevel, 2) / (xpLevel * 0.3)) +
+          25 * (xpLevel / (xpLevel - 1))
+      );
 
       user = await UserDB.findOneAndUpdate(
         {
@@ -38,7 +44,8 @@ module.exports = {
 
       let { xp, level } = user;
 
-      if (xp >= level * 100) {
+      let xpFormula = client.config.xpFormula(level);
+      if (xp >= xpFormula) {
         ++level;
         xp = 0;
 
@@ -99,6 +106,6 @@ module.exports = {
 
     setTimeout(() => {
       cooldown.delete(message.author.id);
-    }, 60 * 1000);
+    }, cdRand * 1000);
   },
 };

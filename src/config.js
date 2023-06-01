@@ -10,6 +10,9 @@ module.exports = {
   token: process.env.TOKEN,
   developers: ["524805915526955048"], // You're ID
   database: process.env.MONGO_URI,
+
+  xpFormula,
+
   color: {
     default: "#7b00ff",
     red: "#ff0051",
@@ -20,6 +23,11 @@ module.exports = {
   },
   fromServer,
 };
+
+function xpFormula(level) {
+  let xp = Math.pow(4 * level, 3) / 8;
+  return xp;
+}
 
 /**
  * @param {EmbedBuilder} embed
