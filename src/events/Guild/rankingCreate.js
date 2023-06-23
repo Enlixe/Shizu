@@ -1,6 +1,7 @@
 const { EmbedBuilder, Client, Message } = require("discord.js");
 const UserDB = require("../../structures/schemas/user");
 const RankLog = require("../../structures/schemas/rank");
+const rank = require("../../structures/schemas/rank");
 
 const cooldown = new Set();
 
@@ -20,6 +21,12 @@ module.exports = {
     let user;
 
     const cdRand = Math.floor(Math.random() * 45) + 1;
+
+    await UserDB.findOneAndUpdate(
+      { Guild, User },
+      { Guild, User },
+      { upsert: true, new: true }
+    );
 
     try {
       const xpLevel = (await UserDB.findOne({ Guild, User })).level;
@@ -45,9 +52,11 @@ module.exports = {
 
         const Rank = await RankLog.findOne({ Guild: message.guild.id });
         //* Give role
-        let roles = Rank.roles.find((r) => r.level === level);
-        if (roles.role) {
-          message.member.roles.add(roles.role);
+        if (Rank.roles !== null) {
+          let roles = Rank.roles.find((r) => {
+            r.level = level;
+          });
+          if (roles) message.member.roles.add(roles.role);
           msg =
             msg +
             `\nAnd you've got the <@&${roles.role}> role! <:yaeheart:1109686395200602212>`;

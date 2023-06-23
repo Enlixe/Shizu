@@ -23,7 +23,8 @@ const { connect } = require("mongoose");
 const Logger = require("./structures/functions/logger"),
   { loadConfig } = require("./structures/functions/configLoader"),
   { loadEvents } = require("./structures/handlers/eventHandler"),
-  { loadButtons } = require("./structures/handlers/buttonHandler");
+  { loadButtons } = require("./structures/handlers/buttonHandler"),
+  { loadCommands } = require("./structures/handlers/commandHandler");
 
 bot.events = new Collection();
 bot.commands = new Collection();
@@ -54,4 +55,14 @@ bot.login(bot.config.token).then(async () => {
     });
 
   await loadConfig(bot);
+  await loadCommands(bot);
+});
+
+bot
+  .on("disconnect", () => bot.logger.log("Bot is disconnecting...", ["WARN"]))
+  .on("reconnecting", () => bot.logger.log("Bot reconnecting...", ["CLIENT"]))
+  .on("error", (e) => bot.logger.log(e, ["ERROR"]))
+  .on("warn", (info) => bot.logger.log(info, ["WARN"]));
+process.on("unhandledRejection", (err) => {
+  console.error(err);
 });
