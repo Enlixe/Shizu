@@ -24,6 +24,7 @@ module.exports = {
       information: "📝",
       moderation: "🛠️",
       developer: "🌸",
+      special: "🎄",
     };
 
     function getCmd(name) {
