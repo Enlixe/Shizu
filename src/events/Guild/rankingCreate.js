@@ -32,7 +32,8 @@ module.exports = {
       const xpLevel = (await UserDB.findOne({ Guild, User })).level;
       const xpAmount = Math.floor(
         Math.random() * (Math.pow(xpLevel, 2) / (xpLevel * 0.3)) +
-          25 * (xpLevel / (xpLevel - 1))
+          // 25 * (xpLevel / (xpLevel - 1))
+          25 * (xpLevel / ((xpLevel === 1 ? 2 : xpLevel) - 1))
       );
 
       user = await UserDB.findOneAndUpdate(
@@ -53,13 +54,16 @@ module.exports = {
         const Rank = await RankLog.findOne({ Guild: message.guild.id });
         //* Give role
         if (Rank.roles !== null) {
-          let roles = Rank.roles.find((r) => {
-            r.level = level;
-          });
-          if (roles) message.member.roles.add(roles.role);
-          msg =
-            msg +
-            `\nAnd you've got the <@&${roles.role}> role! <:yaeheart:1109686395200602212>`;
+          let roles = Rank.roles.find((r) => 
+            r.level === level
+          );
+          if (roles) {
+            let role = roles.role;
+            message.member.roles.add(role);
+            msg =
+              msg +
+              `\nAnd you've got the <@&${role}> role! <:yaeheart:1109686395200602212>`;
+          }
         }
         if (Rank.logChannel) {
           let notificationChannel = await client.channels.fetch(

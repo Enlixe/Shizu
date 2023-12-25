@@ -32,14 +32,12 @@ module.exports = {
       .setLevel(user.level)
       .setRank(0, 0, false)
       .setRequiredXP(xpFormula)
-      .setStatus(member.presence.status)
       .setProgressBar(bot.config.color.default, "COLOR")
       .setUsername(member.user.username)
       //   .setBackground(
       //     "IMAGE",
       //     "https://wallpapertag.com/wallpaper/full/e/c/6/477550-most-popular-hubble-ultra-deep-field-wallpaper-1920x1200.jpg" // Change to your background image just URL
       //   )
-      .setDiscriminator(member.user.discriminator);
 
     rank.build().then((data) => {
       interaction.followUp({

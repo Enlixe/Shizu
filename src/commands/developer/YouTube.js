@@ -2,8 +2,8 @@ const { ChatInputCommandInteraction, SlashCommandBuilder } = require("discord.js
 module.exports = {
     folder: "special",
     data: new SlashCommandBuilder()
-        .setName("YouTube")
-        .setDescription("It's my youtube channel link :D"),
+        .setName("youtube")
+        .setDescription("It's my YouTube channel link :D"),
     /**
      * @param {ChatInputCommandInteraction} interaction
      */

@@ -1,21 +1,9 @@
-const {
-  Client,
-  GatewayIntentBits,
-  Partials,
-  Collection,
-} = require("discord.js");
-const { Guilds, GuildMembers, GuildMessages, GuildPresences, MessageContent } =
-  GatewayIntentBits;
+const { Client, GatewayIntentBits, Partials, Collection } = require("discord.js");
+const { Guilds, GuildMembers, GuildMessages, GuildPresences, MessageContent } = GatewayIntentBits;
 const { User, Message, GuildMember, ThreadMember } = Partials;
 
 const bot = new Client({
-  intents: [
-    Guilds,
-    GuildMembers,
-    GuildMessages,
-    GuildPresences,
-    MessageContent,
-  ],
+  intents: [ Guilds, GuildMembers, GuildMessages, GuildPresences, MessageContent ],
   partials: [User, Message, GuildMember, ThreadMember],
 });
 
@@ -35,6 +23,8 @@ bot.guildConfig = new Collection();
 
 bot.logger = new Logger(); // client.logger.log('Client is Running!', ['CLIENT']);
 bot.config = require("./config.js");
+
+if (process.env.ALIVE === true) require("../keepalive.js");
 
 bot.login(bot.config.token).then(async () => {
   loadEvents(bot);

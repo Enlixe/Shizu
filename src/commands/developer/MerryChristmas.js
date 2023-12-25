@@ -2,7 +2,7 @@ const { ChatInputCommandInteraction, SlashCommandBuilder } = require("discord.js
 module.exports = {
     folder: "special",
     data: new SlashCommandBuilder()
-        .setName("MerryChristmas")
+        .setName("merrychristmas")
         .setDescription("Merry Christmas! for all you guys. Wishing you joy, love, and peace."),
     /**
      * @param {ChatInputCommandInteraction} interaction

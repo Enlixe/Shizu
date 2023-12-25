@@ -5,7 +5,7 @@ module.exports = model(
   new Schema({
     Guild: { type: String, require: true },
     User: { type: String, require: true },
-    xp: { type: Number, default: 0 },
+    xp: { type: Number, default: 1 },
     level: { type: Number, default: 1 },
   })
 );

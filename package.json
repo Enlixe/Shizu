@@ -5,7 +5,8 @@
   "main": "src/Shizu.js",
   "scripts": {
     "actions": "exit 0",
-    "dev": "node ."
+    "dev": "node .",
+    "start": "set ALIVE=true && node ."
   },
   "author": "Enlixe",
   "license": "ISC",
