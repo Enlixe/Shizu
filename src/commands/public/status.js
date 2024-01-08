@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder } = require("discord.js");
+const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 module.exports = {
     folder: "information",
     data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     execute(interaction, bot) {
-        const response = new MessageEmbed()
+        const response = new EmbedBuilder()
 			.setColor("AQUA")
 			.setAuthor(bot.user.username, bot.user.avatarURL())
 			.setDescription(`
