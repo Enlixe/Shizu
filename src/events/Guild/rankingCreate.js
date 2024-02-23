@@ -65,32 +65,34 @@ module.exports = {
                 `\nAnd you've got the <@&${role}> role! <:yaeheart:1109686395200602212>`;
             }
             }
-        }
-        if (Rank.logChannel) {
-          let notificationChannel = await client.channels.fetch(
-            Rank.logChannel
-          );
+          if (Rank.logChannel) {
+            let notificationChannel = await client.channels.fetch(
+              Rank.logChannel
+            );
 
-          const embed = new EmbedBuilder()
-            .setTitle("🎉 Congratulations 🎉")
-            .setThumbnail(message.author.avatarURL({ dynamic: true }))
-            .addFields(
-              {
-                name: "User:",
-                value: `${message.author.username}`,
-                inline: true,
-              },
-              { name: "Level:", value: `${level}`, inline: true },
-              {
-                name: "Check the leaderboard using:",
-                value: `\`/rank leadearboard\``,
-              }
-            )
-            .setColor(user.hexAccentColor || "Random");
+            const embed = new EmbedBuilder()
+              .setTitle("🎉 Congratulations 🎉")
+              .setThumbnail(message.author.avatarURL({ dynamic: true }))
+              .addFields(
+                {
+                  name: "User:",
+                  value: `${message.author.username}`,
+                  inline: true,
+                },
+                { name: "Level:", value: `${level}`, inline: true },
+                {
+                  name: "Check the leaderboard using:",
+                  value: `\`/rank leadearboard\``,
+                }
+              )
+              .setColor(user.hexAccentColor || "Random");
 
-          notificationChannel.send({ embeds: [embed] });
-        }
-        if (Rank.notification) {
+            notificationChannel.send({ embeds: [embed] });
+          }
+          if (Rank.notification) {
+            message.channel.send(msg);
+          }
+        } else {
           message.channel.send(msg);
         }
 
