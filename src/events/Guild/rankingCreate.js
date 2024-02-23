@@ -1,7 +1,6 @@
 const { EmbedBuilder, Client, Message } = require("discord.js");
 const UserDB = require("../../structures/schemas/user");
 const RankLog = require("../../structures/schemas/rank");
-const rank = require("../../structures/schemas/rank");
 
 const cooldown = new Set();
 
@@ -53,17 +52,19 @@ module.exports = {
 
         const Rank = await RankLog.findOne({ Guild: message.guild.id });
         //* Give role
-        if (Rank.roles !== null) {
-          let roles = Rank.roles.find((r) => 
-            r.level === level
-          );
-          if (roles) {
-            let role = roles.role;
-            message.member.roles.add(role);
-            msg =
-              msg +
-              `\nAnd you've got the <@&${role}> role! <:yaeheart:1109686395200602212>`;
-          }
+        if (Rank !== null) {
+          if (Rank.roles !== null) {
+            let roles = Rank.roles.find((r) => 
+              r.level === level
+            );
+            if (roles) {
+              let role = roles.role;
+              message.member.roles.add(role);
+              msg =
+                msg +
+                `\nAnd you've got the <@&${role}> role! <:yaeheart:1109686395200602212>`;
+            }
+            }
         }
         if (Rank.logChannel) {
           let notificationChannel = await client.channels.fetch(
