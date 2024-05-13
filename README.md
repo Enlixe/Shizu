@@ -12,7 +12,7 @@ A moderation, anime, and fun bot, to fill your sever with more utility command a
 
 ## Features
 
-- 🌸 | Anime <sup>`TBA`
+- 🌸 | Anime <sup>`COMING SOON`
 - 🛠️ | Moderation commands
 - 📝 | Utilities commands
 - 😆 | Fun <sup>`MORE TBA`
@@ -56,6 +56,6 @@ All merge requests are welcome!
 
 ## Links
 
-Join the [Community Server](https://enlixe.github.io/l/dc "Community Server")
+Join the [Community Server](https://dsc.gg/enlx "Community Server")
 
 My [GitHub](https://github.com/Enlixe/ "GitHub")

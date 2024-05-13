@@ -24,21 +24,16 @@ bot.guildConfig = new Collection();
 bot.logger = new Logger(); // client.logger.log('Client is Running!', ['CLIENT']);
 bot.config = require("./config.js");
 
-if (process.env.ALIVE === true) require("../keepalive.js");
-
 bot.login(bot.config.token).then(async () => {
   loadEvents(bot);
   loadButtons(bot);
 
   await connect(bot.config.database)
     .then(() =>
-      bot.logger.log(`Connected to the Mongodb database.`, [
-        "CLIENT",
-        "DATABASE",
-      ])
+      bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT","DATABASE"])
     )
     .catch((err) => {
-      bot.logger.log(
+      bot.logger.error(
         "Unable to connect to the Mongodb database. Error: " + err,
         ["CLIENT", "DATABASE"]
       );
@@ -49,10 +44,7 @@ bot.login(bot.config.token).then(async () => {
 });
 
 bot
-  .on("disconnect", () => bot.logger.log("Bot is disconnecting...", ["WARN"]))
-  .on("reconnecting", () => bot.logger.log("Bot reconnecting...", ["CLIENT"]))
-  .on("error", (e) => bot.logger.log(e, ["ERROR"]))
-  .on("warn", (info) => bot.logger.log(info, ["WARN"]));
-process.on("unhandledRejection", (err) => {
-  console.error(err);
-});
+  .on("disconnect", () => bot.logger.warn("Bot is disconnecting...", ["CLIENT"]))
+  .on("reconnecting", () => bot.logger.warn("Bot reconnecting...", ["CLIENT"]))
+  .on("error", (e) => bot.logger.error(e, ["CLIENT", "ERROR"]))
+  .on("warn", (info) => bot.logger.warn(info, ["CLIENT", "WARN"]));
