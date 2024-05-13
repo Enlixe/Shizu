@@ -27,10 +27,11 @@ module.exports = {
    * @param {ChatInputCommandInteraction} interaction
    * @param {Client} bot
    */
-  execute(interaction, bot) {
+  async execute(interaction, bot) {
     const events = interaction.options.getString("events");
+    await interaction.deferReply({ ephemeral: true })
     bot.emit(events, interaction.member);
-    interaction.reply({
+    interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(bot.config.color.default)
