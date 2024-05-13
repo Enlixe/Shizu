@@ -37,6 +37,11 @@ module.exports = {
           scFile.execute(interaction, bot);
         }
       } else cmd.execute(interaction, bot);
+
+      process.on("unhandledRejection", (err) => {
+        interaction.reply({content:`There's something wrong, please report this to the bot developer.\n\`\`\`${err}\`\`\``, ephemeral: true})
+        bot.logger.error(err, ["ERROR"])
+      });
     }
 
     if (interaction.type == InteractionType.ApplicationCommandAutocomplete) {
