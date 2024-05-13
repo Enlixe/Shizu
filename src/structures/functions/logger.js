@@ -21,7 +21,20 @@ module.exports = class {
   error(text, groups) {
     if (groups) {
       const mapped = groups.map((v) => `[${v}]`);
-      console.error(`${groups.join(" ")} - ${text}`);
+      console.error(`${chalk.redBright(mapped.join(" "))} - ${text}`);
+    } else {
+      console.error(text);
+    }
+  }
+
+  /**
+   * @param {string} text
+   * @param {string[] | undefined} groups
+   */
+  warn(text, groups) {
+    if (groups) {
+      const mapped = groups.map((v) => `[${v}]`);
+      console.error(`${chalk.keyword('orange')(mapped.join(" "))} - ${text}`);
     } else {
       console.error(text);
     }
