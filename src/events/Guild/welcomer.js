@@ -34,7 +34,7 @@ module.exports = {
     attachment ? Embed.setImage(attachment) : null;
 
     bot.channels.cache
-      .get(channel)
+      .get(guildConfig.welcomeChannel)
       .send({ content: `${user}`, embeds: [Embed] })
       .catch((err) => {
         console.log(err);
