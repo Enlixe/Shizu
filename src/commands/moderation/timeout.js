@@ -5,7 +5,7 @@ const {
   EmbedBuilder,
   Client,
 } = require("discord.js");
-const DB = require("../../structures/schemas/infractions");
+const DB = require("../../structures/schemas/infraction");
 const ms = require("ms");
 
 module.exports = {

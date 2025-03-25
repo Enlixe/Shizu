@@ -1,7 +1,7 @@
 const { model, Schema } = require("mongoose");
 
 module.exports = model(
-  "Infractions",
+  "Infraction",
   new Schema({
     Guild: String,
     User: String,
