@@ -15,6 +15,7 @@ async function loadConfig(bot) {
   let welcomeC = new Collection();
   (await welcomer.find()).forEach((doc) => {
     welcomeC.set(doc.Guild, {
+      enabled: doc.enabled,
       welcomeChannel: doc.welcomeChannel,
       welcomeMsg: doc.welcomeMsg,
       welcomeAttachment: doc.welcomeAttchment,

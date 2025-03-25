@@ -9,10 +9,15 @@ module.exports = {
   async execute(member, bot) {
     const guildConfig = bot.guildConfig.get(member.guild.id);
     if (!guildConfig) return;
-
+    console.log("1")
+    const enabled = guildConfig.enabled;
+    if (!enabled) return;
+    
+    console.log("2")
     const channel = guildConfig.welcomeChannel;
     if (!channel) return;
 
+    console.log("3")
     let msg = guildConfig.welcomeMsg;
     let attachment = guildConfig.welcomeAttachment;
 

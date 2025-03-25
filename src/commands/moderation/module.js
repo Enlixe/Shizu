@@ -2,9 +2,10 @@ const {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
   PermissionFlagsBits,
-  EmbedBuilder
+  EmbedBuilder,
 } = require("discord.js");
 const Rank = require("../../structures/schemas/rank");
+const Welcomer = require("../../structures/schemas/welcomer");
 
 module.exports = {
   folder: "moderation",
@@ -20,7 +21,7 @@ module.exports = {
         .setRequired(true)
         .addChoices([
           { name: "rank", value: "rank" },
-          { name: "Moderation", value: "moderation" },
+          { name: "welcomer", value: "welcomer" },
         ])
     ),
   /**
@@ -55,8 +56,41 @@ module.exports = {
               ),
           ],
         });
-      case "moderation":
-        // Enable/disable moderation module
+      case "welcomer":
+        let _welcomer = await Welcomer.findOne({ Guild: interaction.guild.id });
+        if (_welcomer) {
+        let gConfig = bot.guildConfig.get(interaction.guildId);
+          gConfig.enabled = !gConfig.enabled;
+          _welcomer.enabled = !_welcomer.enabled;
+          await _welcomer.save();
+          return interaction.reply({
+            embeds: [
+              new EmbedBuilder()
+                .setColor(
+                  _welcomer.enabled
+                    ? bot.config.color.green
+                    : bot.config.color.red
+                )
+                .setDescription(
+                  `Welcomer system has been \`${
+                    _welcomer.enabled ? "enabled" : "disabled"
+                  }\`.`
+                ),
+            ],
+          });
+        } else {
+          return interaction.reply({
+            embeds: [
+              new EmbedBuilder()
+                .setColor(bot.config.color.default)
+                .setFooter({ text: bot.config.embed.footer })
+                .setTimestamp()
+                .setDescription(
+                  `**Welcomer module is not enabled.\nPlease enable first at </welcomer:1352835206331236448>**`
+                ), // Please enable first at 1352835206331236448
+            ],
+          });
+        }
         break;
     }
   },
