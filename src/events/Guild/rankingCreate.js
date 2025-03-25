@@ -30,9 +30,8 @@ module.exports = {
     try {
       const xpLevel = (await UserDB.findOne({ Guild, User })).level;
       const xpAmount = Math.floor(
-        Math.random() * (Math.pow(xpLevel, 2) / (xpLevel * 0.3)) +
-          // 25 * (xpLevel / (xpLevel - 1))
-          25 * (xpLevel / ((xpLevel === 1 ? 2 : xpLevel) - 1))
+        (Math.random() * 0.5 + 0.5) *  
+        ((Math.pow(xpLevel, 2.3) / (xpLevel * 0.3)) + 25 * (xpLevel / ((xpLevel === 1 ? 2 : xpLevel) - 1)))
       );
 
       user = await UserDB.findOneAndUpdate(

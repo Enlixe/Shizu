@@ -25,7 +25,7 @@ module.exports = {
 };
 
 function xpFormula(level) {
-  let xp = level > 4 ? Math.pow(5 * level, 3) / 8 : Math.pow(4 * level, 3) / 8;
+  let xp = Math.floor(Math.pow((4 + Math.min(level / 10, 1)) * level, 2.8) / 8);
   return xp;
 }
 
