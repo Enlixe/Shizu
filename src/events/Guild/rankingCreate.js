@@ -16,7 +16,9 @@ module.exports = {
 
     if (message.author.bot || !message.guild) return;
     if (cooldown.has(User)) return;
-
+    let _rank = await RankLog.findOne({ Guild: Guild })
+    if (!_rank) return console.log("A"); 
+    if (!_rank.enabled) return console.log(_rank.enabled); 
     let user;
 
     const cdRand = Math.floor(Math.random() * 45) + 1;
@@ -30,8 +32,9 @@ module.exports = {
     try {
       const xpLevel = (await UserDB.findOne({ Guild, User })).level;
       const xpAmount = Math.floor(
-        (Math.random() * 0.5 + 0.5) *  
-        ((Math.pow(xpLevel, 2.3) / (xpLevel * 0.3)) + 25 * (xpLevel / ((xpLevel === 1 ? 2 : xpLevel) - 1)))
+        (Math.random() * 0.5 + 0.5) *
+          (Math.pow(xpLevel, 2.3) / (xpLevel * 0.3) +
+            25 * (xpLevel / ((xpLevel === 1 ? 2 : xpLevel) - 1)))
       );
 
       user = await UserDB.findOneAndUpdate(
@@ -53,9 +56,7 @@ module.exports = {
         //* Give role
         if (Rank !== null) {
           if (Rank.roles !== null) {
-            let roles = Rank.roles.find((r) => 
-              r.level === level
-            );
+            let roles = Rank.roles.find((r) => r.level === level);
             if (roles) {
               let role = roles.role;
               message.member.roles.add(role);
@@ -63,7 +64,7 @@ module.exports = {
                 msg +
                 `\nAnd you've got the <@&${role}> role! <:yaeheart:1109686395200602212>`;
             }
-            }
+          }
           if (Rank.logChannel) {
             let notificationChannel = await client.channels.fetch(
               Rank.logChannel

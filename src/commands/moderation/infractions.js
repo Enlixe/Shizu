@@ -5,7 +5,7 @@ const {
   ApplicationCommandOptionType,
   EmbedBuilder,
 } = require("discord.js");
-const DB = require("../../structures/schemas/infractions");
+const DB = require("../../structures/schemas/infraction");
 
 module.exports = {
   folder: "moderation",
