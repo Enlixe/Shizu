@@ -4,20 +4,21 @@ module.exports = {
   async execute(interaction, bot) {
     if (!interaction.isButton()) return;
 
-    const buttonCustomId = interaction.customId.split(":");
+    const [mainId, subId, ...args] = interaction.customId.split(":");
 
-    let Button;
-    if (buttonCustomId[2])
-      Button =
-        bot.buttons.get(buttonCustomId[0] + ":" + buttonCustomId[1]) ||
-        bot.buttons.get(buttonCustomId[0]);
-    else Button = bot.buttons.get(buttonCustomId[0]);
-    if (!Button) return;
+    // Attempt to retrieve the button handler
+    const buttonHandler =
+      bot.buttons.get(`${mainId}:${subId}`) || bot.buttons.get(mainId);
 
-    const id = Button.id.split(":");
-    if (id[1]) Button.execute(interaction, bot, buttonCustomId.slice(2));
-    else if (buttonCustomId.slice(1) !== null)
-      Button.execute(interaction, bot, buttonCustomId.slice(1));
-    else if (!buttonCustomId.slice(1)) Button.execute(interaction, bot);
+    if (!buttonHandler) return;
+
+    try {
+      // Execute the button handler with appropriate arguments
+      const handlerIdParts = buttonHandler.id.split(":");
+      const handlerArgs = handlerIdParts[1] ? args : subId ? [subId, ...args] : [];
+      await buttonHandler.execute(interaction, bot, handlerArgs);
+    } catch (error) {
+      console.error(`Error executing button interaction: ${error.message}`);
+    }
   },
 };
