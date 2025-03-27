@@ -6,7 +6,7 @@ module.exports = {
    * @param {ChatInputCommandInteraction} interaction
    */
   async execute(interaction, bot) {
-    console.log(`[DEBUG] Interaction started at: ${Date.now()}`);
+    bot.logger.debug(`Interaction started at: ${new Date().toLocaleString()}`, ["Event", "Slash"]);
 
     const cmd = bot.commands.get(interaction.commandName);
     if (interaction.isChatInputCommand()) {

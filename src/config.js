@@ -13,7 +13,10 @@ if (!process.env.TOKEN || !process.env.MONGO_URI) {
 module.exports = {
   token: process.env.TOKEN,
   database: process.env.MONGO_URI,
+  debug: true,
+  table: false,
   developers: ["524805915526955048"], // Your ID
+  dev_guild: ["524807341879853060"], // Your development guild ID
 
   color: {
     default: "#7b00ff",

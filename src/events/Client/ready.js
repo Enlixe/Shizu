@@ -29,7 +29,7 @@ module.exports = {
 
         bot.user.setActivity(activity, { type: ActivityType.Custom, state: `${activity}`});
 
-        bot.logger.log(`Activity updated: ${activity}`, ["Bot", "Ready"]);
+        bot.logger.debug(`Activity updated: ${activity}`, ["Bot", "Ready"]);
         activityIndex = (activityIndex + 1) % activities.length;
       } catch (err) {
         bot.logger.error(`Failed to set activity: ${err.message}`, [

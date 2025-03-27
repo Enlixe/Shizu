@@ -2,7 +2,7 @@ const { loadFiles } = require("../functions/fileLoader");
 const path = require("path");
 
 async function loadEvents(bot) {
-  console.time("[HANDLER] - Loaded Events");
+  if (bot.config.debug) bot.logger.time("Load");
 
   bot.events = new Map();
   const events = [];
@@ -33,13 +33,13 @@ async function loadEvents(bot) {
       }
     }
 
-    console.table(events, ["Event", "Status"]);
-    bot.logger.log("Loaded Events!", ["HANDLER"]);
+    if (bot.config.table) console.table(events, ["Event", "Status"]);
+    bot.logger.log("Loaded Events!", ["Handler", "Events"]);
   } catch (err) {
     bot.logger.error(`Error loading events: ${err.message}`);
   }
 
-  console.timeEnd("[HANDLER] - Loaded Events");
+  if (bot.config.debug) bot.logger.timeEnd("Load", ["Handler", "Events"]);
 }
 
 module.exports = { loadEvents };

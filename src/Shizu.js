@@ -34,6 +34,19 @@ bot.buttons = new Collection();
 bot.guildConfig = new Collection();
 
 bot.logger = new Logger();
+
+/**
+ * @typedef {Object} Config
+ * @property {string} token - The bot's token for authentication.
+ * @property {string} database - The MongoDB connection URI.
+ * @property {boolean} debug - Whether debug mode is enabled.
+ * @property {Function} defaultEmbed - Function to create a default embed.
+ * @property {string} [dev_guild] - The ID of the development guild (optional).
+ * @property {boolean} [table] - Whether to display commands in a table (optional).
+ */
+/**
+ * @type {Config}
+ */
 bot.config = require("./config.js");
 
 async function connectToDatabase(uri, retries = 5, delay = 5000) {
@@ -62,7 +75,7 @@ async function connectToDatabase(uri, retries = 5, delay = 5000) {
 (async () => {
   try {
     await bot.login(bot.config.token);
-    bot.logger.setDebug(true);
+    bot.logger.setDebug(bot.config.debug);
 
     bot.logger.debug("Loading events...", ["Bot", "Init"]);
     await loadEvents(bot);

@@ -6,7 +6,7 @@ const deleteCachedFile = (file) => {
 };
 
 async function loadButtons(bot) {
-  console.time("[HANDLER] - Loaded Buttons");
+  if (bot.config.debug) bot.logger.time("Load");
   const buttons = new Array();
 
   await bot.buttons.clear();
@@ -31,8 +31,8 @@ async function loadButtons(bot) {
     }
   }
 
-  console.table(buttons, ["Buttons", "Status"]);
-  bot.logger.log("Loaded Buttons!", ["HANDLER"]);
-  console.timeEnd("[HANDLER] - Loaded Buttons");
+  if (bot.config.table) console.table(buttons, ["Buttons", "Status"]);
+  bot.logger.log("Loaded Buttons!", ["Handler", "Buttons"]);
+  if (bot.config.debug) bot.logger.timeEnd("Load", ["Handler", "Buttons"]);
 }
 module.exports = { loadButtons };

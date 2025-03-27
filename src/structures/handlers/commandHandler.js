@@ -27,7 +27,9 @@ async function processCommand(file, bot, commands, commandsArray) {
     }
   } catch (err) {
     const fileName = path.basename(file);
-    bot.logger.log(`Error loading command '${fileName}': ${err.message}`, ["COMMAND"]);
+    bot.logger.log(`Error loading command '${fileName}': ${err.message}`, [
+      "COMMAND",
+    ]);
     commands.push({
       Command: fileName.replace(".js", ""),
       Status: "🔴",
@@ -36,7 +38,7 @@ async function processCommand(file, bot, commands, commandsArray) {
 }
 
 async function loadCommands(bot) {
-  console.time("[HANDLER] - Loaded Commands");
+  if (bot.config.debug) bot.logger.time("Load");
 
   await bot.commands.clear();
   await bot.subCommands.clear();
@@ -47,17 +49,31 @@ async function loadCommands(bot) {
   const files = await loadFiles("commands");
 
   try {
-    await Promise.all(files.map((f) => processCommand(f, bot, commands, commandsArray)));
+    await Promise.all(
+      files.map((f) => processCommand(f, bot, commands, commandsArray))
+    );
   } catch (err) {
-    bot.logger.log(`Unexpected error during command loading: ${err.message}`, ["HANDLER"]);
+    bot.logger.log(`Unexpected error during command loading: ${err.message}`, [
+      "Handler", "Commands",
+    ]);
   }
 
+  const devGuild = bot.config.dev_guild; // Set your development guild ID in an environment variable
+  if (devGuild !== null) {
+    await bot.guilds.cache.get(devGuild)?.commands.set(commandsArray);
+    bot.logger.log(`Commands uploaded to development guild: ${devGuild}`, ["Handler", "Commands"]);
+  }
   await bot.application.commands.set(commandsArray);
+  bot.logger.log(`Commands uploaded globally.`, ["Handler", "Commands"]);
 
-  console.table(commands, ["Command", "Status"]);
-  bot.logger.log(`Successfully loaded ${commands.filter(c => c.Status === "🟢").length} commands.`, ["HANDLER"]);
-  bot.logger.log(`Failed to load ${commands.filter(c => c.Status === "🔴").length} commands.`, ["HANDLER"]);
-  console.timeEnd("[HANDLER] - Loaded Commands");
+  const successCount = commands.filter((c) => c.Status === "🟢").length;
+  const failureCount = commands.filter((c) => c.Status === "🔴").length;
+
+  if (bot.config.table) console.table(commands, ["Command", "Status"]);
+  bot.logger.log(`Successfully loaded ${successCount} commands.`, ["Handler", "Commands"]);
+  bot.logger.log(`Failed to load ${failureCount} commands.`, ["Handler", "Commands"]);
+  
+  if (bot.config.debug) bot.logger.timeEnd("Load", ["Handler", "Commands"]);
 }
 
 module.exports = { loadCommands };
