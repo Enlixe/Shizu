@@ -39,7 +39,7 @@ module.exports = {
           }
         } else await cmd.execute(interaction, bot);
       } catch (err) {
-        if (!interaction.replied && !interaction.deferred) {
+        if (!interaction.replied && interaction.deferred) {
           await interaction.followUp({
             content:
               "There's something wrong, please report this to the bot developer.",
@@ -48,7 +48,7 @@ module.exports = {
         }
         bot.logger.error(
           `Error in command ${interaction.commandName}: ${err.message}`,
-          ["SlashCommands", "ERROR"]
+          ["Event", "Slash"]
         );
       }
     }

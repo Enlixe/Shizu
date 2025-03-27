@@ -10,7 +10,7 @@ const { User, Message, GuildMember, ThreadMember } = Partials;
 const mongoose = require("mongoose");
 const { connect } = mongoose;
 const Logger = require("./structures/functions/logger"),
-  { loadConfig } = require("./structures/functions/configLoader"),
+  // { loadConfig } = require("./structures/functions/configLoader"),
   { loadEvents } = require("./structures/handlers/eventHandler"),
   { loadButtons } = require("./structures/handlers/buttonHandler"),
   { loadCommands } = require("./structures/handlers/commandHandler"),
@@ -73,8 +73,8 @@ async function connectToDatabase(uri, retries = 5, delay = 5000) {
     bot.logger.debug("Connecting to the database...", ["Bot", "Init"]);
     await connectToDatabase(bot.config.database);
 
-    bot.logger.debug("Loading configurations...", ["Bot", "Init"]);
-    await loadConfig(bot);
+    // bot.logger.debug("Loading configurations...", ["Bot", "Init"]);
+    // await loadConfig(bot);
 
     bot.logger.debug("Loading commands...", ["Bot", "Init"]);
     await loadCommands(bot);
