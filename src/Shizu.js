@@ -30,12 +30,12 @@ bot.login(bot.config.token).then(async () => {
 
   await connect(bot.config.database)
     .then(() =>
-      bot.logger.log(`Connected to the Mongodb database.`, ["CLIENT","DATABASE"])
+      bot.logger.log(`Connected to the Mongodb database.`, ["Bot","DB"])
     )
     .catch((err) => {
       bot.logger.error(
         "Unable to connect to the Mongodb database. Error: " + err,
-        ["CLIENT", "DATABASE"]
+        ["Bot", "DB"]
       );
     });
 
@@ -44,7 +44,7 @@ bot.login(bot.config.token).then(async () => {
 });
 
 bot
-  .on("disconnect", () => bot.logger.warn("Bot is disconnecting...", ["CLIENT"]))
-  .on("reconnecting", () => bot.logger.warn("Bot reconnecting...", ["CLIENT"]))
-  .on("error", (e) => bot.logger.error(e, ["CLIENT", "ERROR"]))
-  .on("warn", (info) => bot.logger.warn(info, ["CLIENT", "WARN"]));
+  .on("disconnect", () => bot.logger.warn("Bot is disconnecting...", ["Bot"]))
+  .on("reconnecting", () => bot.logger.warn("Bot reconnecting...", ["Bot"]))
+  .on("error", (e) => bot.logger.error(e, ["Bot", "Error"]))
+  .on("warn", (info) => bot.logger.warn(info, ["Bot", "Warn"]));
