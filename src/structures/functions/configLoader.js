@@ -3,53 +3,72 @@ const memberLog = require("../schemas/memberLog");
 const welcomer = require("../schemas/welcomer");
 
 async function loadConfig(bot) {
-  let memberLogC = new Collection();
-  (await memberLog.find()).forEach((doc) => {
-    memberLogC.set(doc.Guild, {
+  try {
+    const memberLogC = await loadMemberLogConfig();
+    const welcomeC = await loadWelcomerConfig();
+
+    bot.guildConfig = mergeCollections(welcomeC, memberLogC);
+
+    bot.logger.log("Loaded Guild Configs to the Collection.", ["Bot", "DB"]);
+  } catch (error) {
+    bot.logger.error("Failed to load guild configs.", ["Bot", "DB", error]);
+    throw error; // Re-throw the error if needed
+  }
+}
+
+async function loadMemberLogConfig() {
+  const collection = new Collection();
+  const docs = await memberLog.find();
+  docs.forEach((doc) => {
+    collection.set(doc.Guild, {
       logChannel: doc.logChannel,
       roleMember: doc.roleMember,
       roleBot: doc.roleBot,
     });
   });
+  return collection;
+}
 
-  let welcomeC = new Collection();
-  (await welcomer.find()).forEach((doc) => {
-    welcomeC.set(doc.Guild, {
+async function loadWelcomerConfig() {
+  const collection = new Collection();
+  const docs = await welcomer.find();
+  docs.forEach((doc) => {
+    collection.set(doc.Guild, {
       enabled: doc.enabled,
       welcomeChannel: doc.welcomeChannel,
       welcomeMsg: doc.welcomeMsg,
       welcomeAttachment: doc.welcomeAttchment,
     });
   });
-
-  bot.guildConfig = await mergeCollections(welcomeC, memberLogC);
-
-  return bot.logger.log("Loaded Guild Configs to the Collection.", [
-    "CLIENT",
-    "DATABASE",
-  ]);
+  return collection;
 }
 
 async function addConfig(bot, id, config) {
-  const { ...rest } = config;
-  const newConfig = new Collection([[id, rest]]);
-  bot.guildConfig = await mergeCollections(bot.guildConfig, newConfig);
-  return true;
+  try {
+    const newConfig = new Collection([[id, { ...config }]]);
+    bot.guildConfig = mergeCollections(bot.guildConfig, newConfig);
+    return true;
+  } catch (error) {
+    bot.logger.error("Failed to add config.", ["Bot", "DB", error]);
+    throw error;
+  }
 }
 
 function mergeCollections(...collections) {
   const mergedCollection = new Collection();
 
   for (const collection of collections) {
+    if (!(collection instanceof Collection)) {
+      throw new TypeError("All inputs must be instances of Collection.");
+    }
+
     for (const [key, value] of collection) {
       if (mergedCollection.has(key)) {
-        // If the key already exists in the merged collection,
-        // we merge the value object with the existing value.
-        const mergedValue = Object.assign({}, mergedCollection.get(key), value);
+        // Merge existing value with the new value
+        const mergedValue = { ...mergedCollection.get(key), ...value };
         mergedCollection.set(key, mergedValue);
       } else {
-        // If the key doesn't exist in the merged collection,
-        // we set the value as is.
+        // Add new key-value pair
         mergedCollection.set(key, value);
       }
     }

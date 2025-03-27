@@ -1,5 +1,10 @@
 const { loadFiles } = require("../functions/fileLoader");
 
+const deleteCachedFile = (file) => {
+  const resolvedPath = require.resolve(file);
+  if (require.cache[resolvedPath]) delete require.cache[resolvedPath];
+};
+
 async function loadButtons(bot) {
   console.time("[HANDLER] - Loaded Buttons");
   const buttons = new Array();
@@ -10,39 +15,21 @@ async function loadButtons(bot) {
 
   for (const f of files) {
     try {
+      deleteCachedFile(f);
       const btn = require(f);
+
+      if (!btn.id || typeof btn.execute !== "function") {
+        throw new Error(`Invalid button structure in file: ${f}`);
+      }
 
       bot.buttons.set(btn.id, btn);
 
       buttons.push({ Buttons: btn.id, Status: "🟢" });
     } catch (err) {
+      bot.logger.error(`Failed to load button from file ${f}: ${err.message}`, ["HANDLER"]);
       buttons.push({ Buttons: f.split("/").pop().slice(0, -3), Status: "🔴" });
     }
   }
-
-  // const buttonsFolder = fs.readdirSync("./src/buttons");
-
-  // for (const folder of buttonsFolder) {
-  //   const buttonFiles = fs
-  //     .readdirSync(`./src/buttons/${folder}`)
-  //     .filter((file) => file.endsWith(".js"));
-
-  //   for (const file of buttonFiles) {
-  //     try {
-  //       const buttonFile = require(`../../buttons/${folder}/${file}`);
-  //       if (!buttonFile.id) return;
-
-  //       buttons.push({ Buttons: buttonFile.id, Status: "🟢" });
-
-  //       bot.buttons.set(buttonFile.id, buttonFile);
-  //     } catch (err) {
-  //       buttons.push({
-  //         Buttons: file,
-  //         Status: "🔴",
-  //       });
-  //     }
-  //   }
-  // }
 
   console.table(buttons, ["Buttons", "Status"]);
   bot.logger.log("Loaded Buttons!", ["HANDLER"]);

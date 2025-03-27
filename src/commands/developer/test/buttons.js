@@ -14,7 +14,7 @@ module.exports = {
   async execute(interaction, bot) {
     const target = interaction.user;
 
-    interaction.reply({
+    interaction.followUp({
       embeds: [
         new EmbedBuilder()
           .setTitle("Test Button")

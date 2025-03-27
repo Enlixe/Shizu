@@ -7,6 +7,10 @@ async function deleteCachedFile(file) {
 }
 
 async function loadFiles(dirName) {
+  if (typeof dirName !== "string" || !dirName.trim()) {
+    throw new Error("[FUNCTIONS] Invalid directory name provided.");
+  }
+
   try {
     const files = await glob(
       path.join(process.cwd(), "src", dirName, "**/*.js").replace(/\\/g, "/")
@@ -16,7 +20,7 @@ async function loadFiles(dirName) {
     return jsFiles;
   } catch (err) {
     console.error(
-      `[FUNCTIONS] Error loading files from directory ${dirName}: ${err}`
+      `[FUNCTIONS] Error loading files from directory ${dirName}: ${err.stack || err}`
     );
     throw err;
   }
