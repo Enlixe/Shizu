@@ -2,7 +2,7 @@ const chalk = require("chalk");
 
 module.exports = class Logger {
   constructor() {
-    this.debugEnabled = true; // Toggle debug logs
+    this.debugEnabled = false;
   }
 
   /**
