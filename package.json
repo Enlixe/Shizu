@@ -1,10 +1,11 @@
 {
   "name": "shizu",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.3",
   "description": "",
-  "main": "src/Shizu.js",
+  "main": "dist/src/Shizu.js",
   "scripts": {
-    "dev": "node .",
+    "dev": "tsx watch src/Shizu.ts",
+    "build": "tsc",
     "start": "node ."
   },
   "author": "Enlixe",
@@ -18,5 +19,9 @@
     "glob": "^10.4.5",
     "moment": "^2.29.4",
     "mongoose": "^7.8.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "tsx": "^4.19.3"
   }
 }
