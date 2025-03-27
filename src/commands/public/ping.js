@@ -1,6 +1,8 @@
 const {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
+  Client,
+  EmbedBuilder,
 } = require("discord.js");
 
 module.exports = {
@@ -10,8 +12,10 @@ module.exports = {
     .setDescription("Ping, pong, ping..."),
   /**
    * @param {ChatInputCommandInteraction} interaction
+   * @param {Client} bot
    */
-  execute(interaction) {
-    return interaction.reply({ content: "Pong.", ephemeral: true });
+  async execute(interaction, bot) {
+      const embed = await bot.config.defaultEmbed(`🏓 Pong! Latency is **${bot.ws.ping}ms**.`);
+      return await interaction.followUp({ embeds: [embed] });
   },
 };
