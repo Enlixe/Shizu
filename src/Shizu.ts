@@ -5,8 +5,8 @@ import { ShizuClient } from "./ShizuClient";
 import config from "./config";
 
 import { loadEvents } from "./structures/handlers/eventHandler";
+import { loadCommands } from "./structures/handlers/commandHandler";
 // import { loadButtons } from "./structures/handlers/buttonHandler";
-// import { loadCommands } from "./structures/handlers/commandHandler";
 // import loadEventListeners from "./structures/handlers/eventListeners";
 
 const bot = new ShizuClient({
@@ -57,8 +57,8 @@ async function connectToDatabase(uri: string, retries = 5, delay = 5000) {
     bot.logger.debug("Connecting to the database...", ["Bot", "Init"]);
     await connectToDatabase(bot.config.database);
 
-    // bot.logger.debug("Loading commands...", ["Bot", "Init"]);
-    // await loadCommands(bot);
+    bot.logger.debug("Loading commands...", ["Bot", "Init"]);
+    await loadCommands(bot);
 
     // loadEventListeners(bot);
   } catch (error: Error | any) {

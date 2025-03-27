@@ -1,20 +1,13 @@
 import { loadFiles } from "../functions/fileLoader";
 import path from "path";
-import { ShizuClient } from "../../ShizuClient"; // Import the CustomClient
+import { ShizuClient, Event } from "../../ShizuClient"; // Import the CustomClient
 import { Collection } from "discord.js"; // Ensure Collection is imported
-
-interface Event {
-  name: string;
-  execute: (...args: any[]) => void;
-  once?: boolean;
-  rest?: boolean;
-}
 
 async function loadEvents(bot: ShizuClient) { // Use CustomClient type
   if (bot.config.debug) bot.logger.time("Load");
 
   // Initialize events as a Collection
-  bot.events = new Collection<string, Function>();
+  bot.events = new Collection<string, Event>();
   const events: { Event: string; Status: string }[] = [];
 
   try {
@@ -34,7 +27,7 @@ async function loadEvents(bot: ShizuClient) { // Use CustomClient type
 
         // Use type assertion to specify the type of target
         (target as ShizuClient)[event.once ? "once" : "on"](event.name, execute);
-        bot.events.set(event.name, execute);
+        bot.events.set(event.name, event);
 
         events.push({ Event: event.name, Status: "🟢" });
       } catch (err: unknown) {

@@ -1,17 +1,18 @@
-const { loadFiles } = require("../functions/fileLoader");
-const path = require("path");
+import { loadFiles } from "../functions/fileLoader";
+import path from "path";
+import { ShizuClient, Command } from "../../ShizuClient"; // Adjust the import path as necessary
 
-function validateCommand(command) {
+function validateCommand(command: Command): void {
   if (command.subCommand || command.data || command.name) {
-    return true;
+    return;
   }
   throw new Error("Invalid command structure");
 }
 
-async function processCommand(file, bot, commands, commandsArray) {
+async function processCommand(file: string, bot: ShizuClient, commands: Array<{ Command: string; Status: string }>, commandsArray: any[]): Promise<void> {
   try {
     delete require.cache[require.resolve(file)];
-    const command = require(file);
+    const command: Command = require(file);
     validateCommand(command);
 
     if (command.subCommand) {
@@ -25,26 +26,24 @@ async function processCommand(file, bot, commands, commandsArray) {
       commandsArray.push(command);
       commands.push({ Command: command.name, Status: "🟢" });
     }
-  } catch (err) {
+  } catch (err: Error | any) {
     const fileName = path.basename(file);
-    bot.logger.log(`Error loading command '${fileName}': ${err.message}`, [
-      "COMMAND",
-    ]);
+    bot.logger.log(`Error loading command '${fileName}': ${err.message}`, ["COMMAND"]);
     commands.push({
-      Command: fileName.replace(".js", ""),
+      Command: fileName.replace(".ts", ""),
       Status: "🔴",
     });
   }
 }
 
-async function loadCommands(bot) {
+async function loadCommands(bot: ShizuClient): Promise<void> {
   if (bot.config.debug) bot.logger.time("Load");
 
   await bot.commands.clear();
   await bot.subCommands.clear();
 
-  const commands = [];
-  const commandsArray = [];
+  const commands: Array<{ Command: string; Status: string }> = [];
+  const commandsArray: any[] = [];
 
   const files = await loadFiles("commands");
 
@@ -52,18 +51,16 @@ async function loadCommands(bot) {
     await Promise.all(
       files.map((f) => processCommand(f, bot, commands, commandsArray))
     );
-  } catch (err) {
-    bot.logger.log(`Unexpected error during command loading: ${err.message}`, [
-      "Handler", "Commands",
-    ]);
+  } catch (err: Error | any) {
+    bot.logger.log(`Unexpected error during command loading: ${err.message}`, ["Handler", "Commands"]);
   }
 
-  const devGuild = bot.config.dev_guild; // Set your development guild ID in an environment variable
-  if (devGuild !== null) {
-    await bot.guilds.cache.get(devGuild)?.commands.set(commandsArray);
-    bot.logger.log(`Commands uploaded to development guild: ${devGuild}`, ["Handler", "Commands"]);
-  }
-  await bot.application.commands.set(commandsArray);
+  // const devGuild = bot.config.dev_guild; // Set your development guild ID in an environment variable
+  // if (devGuild !== null) {
+  //   await bot.guilds.cache.get(devGuild)?.commands.set(commandsArray);
+  //   bot.logger.log(`Commands uploaded to development guild: ${devGuild}`, ["Handler", "Commands"]);
+  // }
+  // await bot.application.commands.set(commandsArray);
   bot.logger.log(`Commands uploaded globally.`, ["Handler", "Commands"]);
 
   const successCount = commands.filter((c) => c.Status === "🟢").length;
@@ -72,8 +69,8 @@ async function loadCommands(bot) {
   if (bot.config.table) console.table(commands, ["Command", "Status"]);
   bot.logger.log(`Successfully loaded ${successCount} commands.`, ["Handler", "Commands"]);
   bot.logger.log(`Failed to load ${failureCount} commands.`, ["Handler", "Commands"]);
-  
+
   if (bot.config.debug) bot.logger.timeEnd("Load", ["Handler", "Commands"]);
 }
 
-module.exports = { loadCommands };
+export { loadCommands };

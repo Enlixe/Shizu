@@ -1,4 +1,4 @@
-import { Client, Collection, ColorResolvable, EmbedBuilder, ActionRowBuilder } from "discord.js";
+import { Client, Collection, ColorResolvable, EmbedBuilder, ActionRowBuilder, ClientOptions, ChatInputCommandInteraction, AutocompleteInteraction } from "discord.js";
 import Logger from "./structures/functions/logger";
 
 export interface Config {
@@ -27,21 +27,35 @@ export interface Event {
   rest?: boolean;
 }
 
+export interface Command {
+  subCommand?: string;
+  data?: {
+    name: string;
+    toJSON: () => any; // Adjust the return type as necessary
+  };
+  folder?: string;
+  name?: string;
+  description?: string;
+  developer?: boolean;
+  autocomplete?: ChatInputCommandInteraction | AutocompleteInteraction;
+  execute: (interaction: ChatInputCommandInteraction, bot: ShizuClient) => Promise<void>; // Specify both parameters
+}
+
 export class ShizuClient extends Client {
-  public events: Collection<string, Function>;
-  public commands: Collection<string, Function>;
-  public subCommands: Collection<string, Function>;
-  public buttons: Collection<string, Function>;
+  public events: Collection<string, Event>; // Change to Event
+  public commands: Collection<string, Command>; // Change to Command
+  public subCommands: Collection<string, Command>; // Change to Command
+  public buttons: Collection<string, Function>; // Adjust if you have a specific type for buttons
   public guildConfig: Collection<string, any>;
   public logger: Logger;
   public config: Config;
 
-  constructor(options: any) {
+  constructor(options: ClientOptions) {
     super(options);
-    this.events = new Collection<string, Function>(); // Initialize as Collection
-    this.commands = new Collection<string, Function>();
-    this.subCommands = new Collection<string, Function>();
-    this.buttons = new Collection<string, Function>();
+    this.events = new Collection<string, Event>(); // Initialize as Collection of Event
+    this.commands = new Collection<string, Command>(); // Initialize as Collection of Command
+    this.subCommands = new Collection<string, Command>(); // Initialize as Collection of Command
+    this.buttons = new Collection<string, Function>(); // Adjust if you have a specific type for buttons
     this.guildConfig = new Collection<string, any>();
     this.logger = new Logger();
     this.config = {} as Config; // Initialize with an empty object or load your config later
