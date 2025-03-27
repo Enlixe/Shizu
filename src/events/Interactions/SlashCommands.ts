@@ -30,7 +30,7 @@ const interactionCreateEvent: Event = {
       const subCommand = interaction.options.getSubcommand(false);
       try {
         if (!interaction.deferred && !interaction.replied) {
-          await interaction.deferReply({ flags: 64 }); // Use flags instead of ephemeral
+          await interaction.deferReply(); // Use flags instead of ephemeral
         }
 
         if (subCommand) {
