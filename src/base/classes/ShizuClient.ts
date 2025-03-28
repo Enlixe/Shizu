@@ -1,11 +1,12 @@
 // import { Client, Collection, ColorResolvable, EmbedBuilder, ActionRowBuilder, ClientOptions, ChatInputCommandInteraction, AutocompleteInteraction } from "discord.js";
 // import Logger from "../functions/logger";
-import { Client, Collection } from "discord.js";
+import { Client, Collection, GatewayIntentBits } from "discord.js";
 import IShizuClient from "../interfaces/IShizuClient";
 import IConfig from "../interfaces/IConfig";
 import Handler from "./Handler";
 import Command from "./Command";
 import SubCommand from "./SubCommand";
+import { connect } from "mongoose";
 
 // export interface Event {
 //   name: string;
@@ -30,17 +31,17 @@ import SubCommand from "./SubCommand";
 
 export default class ShizuClient extends Client implements IShizuClient {
   // public logger: Logger;
+  devMode: boolean;
   handler: Handler; 
   config: IConfig;
-
   commands: Collection<string, Command>;
   subCommands: Collection<string, SubCommand>;
-
   cooldowns: Collection<string, Collection<string, number>>;
 
   constructor(){
-    super({ intents: [] });
+    super({ intents: [GatewayIntentBits.Guilds] });
 
+    this.devMode = (process.argv.slice(2).includes("--dev"))
     this.config = require(`${process.cwd()}/src/config.ts`).config;
     this.handler = new Handler(this)
     this.commands = new Collection();
@@ -48,8 +49,14 @@ export default class ShizuClient extends Client implements IShizuClient {
     this.cooldowns = new Collection();
   }
   Init(): void {
+    console.log(`Starting the bot in ${this.devMode ? "development" : "production"} mode.`)
     this.LoadHandlers()
-    this.login(this.config.token).catch((err) => console.error(err));
+
+    this.login(this.devMode ? this.config.dev_token : this.config.token).catch((err) => console.error(err));
+  
+    connect(this.devMode ? this.config.dev_mongo_uri : this.config.mongo_uri)
+      .then(()=> console.log(`Connected to MongoDB.`))
+      .catch((err)=> console.error(err))
   }
   LoadHandlers(): void {
     this.handler.LoadEvents()

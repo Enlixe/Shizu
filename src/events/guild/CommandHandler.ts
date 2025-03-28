@@ -21,6 +21,12 @@ export default class CommandHandler extends Event {
         //@ts-ignore
         if(!cmd) return interaction.reply({ content: "This command doesn't exist", flags: 64}) && this.client.commands.delete(interaction.commandName);
         
+        if(cmd.dev && !this.client.config.dev_user.includes(interaction.user.id)) 
+            return interaction.reply({embeds: [new EmbedBuilder()
+                .setColor("Red")
+                .setDescription(`❌ This command is only available to developers.`)
+            ], flags:64 })
+
         const {cooldowns} = this.client;
         if(!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
 

@@ -1,4 +1,3 @@
-// import { Config } from "./base/classes/ShizuClient";
 import { resolveColor } from "discord.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -7,27 +6,34 @@ if (!process.env.TOKEN || !process.env.MONGO_URI) {
   throw new Error("Missing required environment variables: TOKEN or MONGO_URI");
 }
 
-const config = {
+const config  = {
   token: process.env.TOKEN,
-  client_id: "734601284161765458",
-  dev_guild: "524807341879853060",
+  client_id: process.env.CLIENT_ID,
+  mongo_uri: process.env.MONGO_URI,
 
-  database: process.env.MONGO_URI,
-  debug: true,
-  debug_table: true,
+  dev_token: process.env.DEV_TOKEN,
+  dev_client_id: process.env.DEV_CLIENT_ID,
+  dev_mongo_uri: process.env.DEV_MONGO_URI,
+  dev_guild: process.env.DEV_GUILD,
+  dev_user: ["524805915526955048"],
 
-  devs: ["524805915526955048"],
+  // database: process.env.MONGO_URI,
+  // debug: true,
+  // debug_table: true,
+
+  // devs: ["524805915526955048"],
   // dev_guild: [],
 
   color: {
     default: resolveColor("#7b00ff"),
-    red: resolveColor("#ff0051"),
-    green: resolveColor("#00fcb9"),
-  },
+  }
+  //   red: resolveColor("#ff0051"),
+  //   green: resolveColor("#00fcb9"),
+  // },
   
-  embed: {
-    footer: "Shizu | シズ", // And the default footer for the embeds
-  },
+  // embed: {
+  //   footer: "Shizu | シズ", // And the default footer for the embeds
+  // },
 
   // defaultEmbed, // Explicitly assign the function
   // xpFormula,
