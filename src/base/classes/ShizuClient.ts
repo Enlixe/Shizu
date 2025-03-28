@@ -7,6 +7,7 @@ import Handler from "./Handler";
 import Command from "./Command";
 import SubCommand from "./SubCommand";
 import { connect } from "mongoose";
+import Logger from "../helpers/Logger";
 
 // export interface Event {
 //   name: string;
@@ -33,6 +34,7 @@ export default class ShizuClient extends Client implements IShizuClient {
   // public logger: Logger;
   devMode: boolean;
   handler: Handler; 
+  logger: Logger;
   config: IConfig;
   commands: Collection<string, Command>;
   subCommands: Collection<string, SubCommand>;
@@ -43,19 +45,20 @@ export default class ShizuClient extends Client implements IShizuClient {
 
     this.devMode = (process.argv.slice(2).includes("--dev"))
     this.config = require(`${process.cwd()}/src/config.ts`).config;
+    this.logger = new Logger()
     this.handler = new Handler(this)
     this.commands = new Collection();
     this.subCommands = new Collection();
     this.cooldowns = new Collection();
   }
   Init(): void {
-    console.log(`Starting the bot in ${this.devMode ? "development" : "production"} mode.`)
+    this.logger.log(`Starting the bot in ${this.devMode ? "development" : "production"} mode.`, ["Bot"])
     this.LoadHandlers()
 
     this.login(this.devMode ? this.config.dev_token : this.config.token).catch((err) => console.error(err));
   
     connect(this.devMode ? this.config.dev_mongo_uri : this.config.mongo_uri)
-      .then(()=> console.log(`Connected to MongoDB.`))
+      .then(()=> this.logger.log(`Connected to MongoDB.`, ["DB"]))
       .catch((err)=> console.error(err))
   }
   LoadHandlers(): void {
