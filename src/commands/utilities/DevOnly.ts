@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
-import Command from "../base/classes/Command";
-import ShizuClient from "../base/classes/ShizuClient";
-import Category from "../base/enums/Category";
+import Command from "../../base/classes/Command";
+import ShizuClient from "../../base/classes/ShizuClient";
+import Category from "../../base/enums/Category";
 
 export default class DevOnly extends Command{
     constructor(client: ShizuClient){
