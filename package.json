@@ -1,12 +1,14 @@
 {
   "name": "shizu",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "",
-  "main": "dist/src/Shizu.js",
+  "main": "./src/Shizu.js",
   "scripts": {
-    "dev": "tsx watch src/Shizu.ts",
-    "build": "tsc",
-    "start": "node ."
+    "clean": "del /s /q build",
+    "build": "tsc -build",
+    "start": "npm run clean && npm run build && node build/Shizu.js",
+    "startNoClean": "npm run build && node build/Shizu.js",
+    "dev": "tsx watch src/Shizu.ts"
   },
   "author": "Enlixe",
   "license": "ISC",
