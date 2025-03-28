@@ -2,6 +2,8 @@ import { ActionRowBuilder, ColorResolvable, EmbedBuilder } from "discord.js";
 
 export default interface IConfig {
   token: string;
+  client_id: string;
+  dev_guild: string;
   database: string;
   debug: boolean;
   debug_table: boolean;

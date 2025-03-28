@@ -1,8 +1,11 @@
 // import { Client, Collection, ColorResolvable, EmbedBuilder, ActionRowBuilder, ClientOptions, ChatInputCommandInteraction, AutocompleteInteraction } from "discord.js";
 // import Logger from "../functions/logger";
+import { Client, Collection } from "discord.js";
 import IShizuClient from "../interfaces/IShizuClient";
 import IConfig from "../interfaces/IConfig";
-import { Client } from "discord.js";
+import Handler from "./Handler";
+import Command from "./Command";
+import SubCommand from "./SubCommand";
 
 // export interface Event {
 //   name: string;
@@ -27,14 +30,30 @@ import { Client } from "discord.js";
 
 export default class ShizuClient extends Client implements IShizuClient {
   // public logger: Logger;
+  handler: Handler; 
   config: IConfig;
+
+  commands: Collection<string, Command>;
+  subCommands: Collection<string, SubCommand>;
+
+  cooldowns: Collection<string, Collection<string, number>>;
 
   constructor(){
     super({ intents: [] });
+
     this.config = require(`${process.cwd()}/src/config.ts`).config;
+    this.handler = new Handler(this)
+    this.commands = new Collection();
+    this.subCommands = new Collection();
+    this.cooldowns = new Collection();
   }
   Init(): void {
-    this.login(this.config.token).then(() => console.log("Logged in")).catch((err) => console.error(err));
+    this.LoadHandlers()
+    this.login(this.config.token).catch((err) => console.error(err));
+  }
+  LoadHandlers(): void {
+    this.handler.LoadEvents()
+    this.handler.LoadCommands()
   }
 
   // public events: Collection<string, Event>;

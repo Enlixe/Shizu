@@ -1,15 +1,17 @@
 // import { Config } from "./base/classes/ShizuClient";
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, resolveColor } from "discord.js";
+import { resolveColor } from "discord.js";
 import dotenv from "dotenv";
-import IConfig from "./base/interfaces/IConfig";
 dotenv.config();
 
 if (!process.env.TOKEN || !process.env.MONGO_URI) {
   throw new Error("Missing required environment variables: TOKEN or MONGO_URI");
 }
 
-const config: IConfig = {
+const config = {
   token: process.env.TOKEN,
+  client_id: "734601284161765458",
+  dev_guild: "524807341879853060",
+
   database: process.env.MONGO_URI,
   debug: true,
   debug_table: true,

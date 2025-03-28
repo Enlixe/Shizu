@@ -1,6 +1,6 @@
 {
   "name": "shizu",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "",
   "main": "./src/Shizu.js",
   "scripts": {
@@ -8,6 +8,8 @@
     "build": "tsc -build",
     "start": "npm run clean && npm run build && node build/Shizu.js",
     "startNoClean": "npm run build && node build/Shizu.js",
+    "devStart": "npm run clean && npm run build && node build/Shizu.js --dev",
+    "devStartNoClean": "npm run build && node build/Shizu.js --dev",
     "dev": "tsx watch src/Shizu.ts"
   },
   "author": "Enlixe",
