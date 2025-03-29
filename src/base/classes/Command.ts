@@ -4,6 +4,8 @@ import ICommand from "../interfaces/ICommand";
 import ShizuClient from "./ShizuClient";
 import ICommandOptions from "../interfaces/ICommandOptions";
 
+const DEFAULT_COOLDOWN = 5; // seconds
+
 export default class Command implements ICommand {
     client: ShizuClient;
     name: string;
@@ -23,7 +25,7 @@ export default class Command implements ICommand {
         this.options = options.options;
         this.default_member_permission = options.default_member_permission;
         this.dm_permission = options.dm_permission;
-        this.cooldown = options.cooldown;
+        this.cooldown = options.cooldown || DEFAULT_COOLDOWN;
         this.dev = options.dev || false;
     }
     Execute(interaction: ChatInputCommandInteraction): void {

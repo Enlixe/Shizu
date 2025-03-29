@@ -14,9 +14,9 @@ export default class GuildDelete extends Event {
 
     async Execute(guild: Guild) {
         try {
-            await GuildConfig.deleteOne({guildId: guild.id})
-        } catch (err) {
-            console.error(err)
+            await GuildConfig.deleteOne({ guildId: guild.id });
+        } catch (error: any) {
+            this.client.logger.error(`Error in GuildDelete event: ${error.message}`, ["Event", "GuildDelete"]);
         }
     }
 }

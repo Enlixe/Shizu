@@ -28,14 +28,21 @@ export default class ShizuClient extends Client implements IShizuClient {
     this.cooldowns = new Collection();
   }
   Init(): void {
-    this.logger.log(`Starting the bot in ${this.devMode ? "development" : "production"} mode.`, ["Bot"])
-    this.LoadHandlers()
+    this.logger.log(`Starting the bot in ${this.devMode ? "development" : "production"} mode.`, ["Bot"]);
+    this.LoadHandlers();
 
-    this.login(this.devMode ? this.config.dev_token : this.config.token).catch((err) => console.error(err));
-  
+    this.login(this.devMode ? this.config.dev_token : this.config.token)
+        .catch((err) => {
+            this.logger.error(`Failed to log in: ${err.message}`, ["ShizuClient", "Init"]);
+            console.error(err);
+        });
+
     connect(this.devMode ? this.config.dev_mongo_uri : this.config.mongo_uri)
-      .then(()=> this.logger.log(`Connected to MongoDB.`, ["DB"]))
-      .catch((err)=> console.error(err))
+        .then(() => this.logger.log(`Connected to MongoDB.`, ["DB"]))
+        .catch((err) => {
+            this.logger.error(`Failed to connect to MongoDB: ${err.message}`, ["ShizuClient", "Init"]);
+            console.error(err);
+        });
   }
   LoadHandlers(): void {
     this.handler.LoadEvents()
