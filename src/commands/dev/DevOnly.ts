@@ -7,8 +7,8 @@ export default class DevOnly extends Command{
     constructor(client: ShizuClient){
         super(client, {
             name: "devonly",
-            description: "Dev only command",
-            category: Category.Utilities,
+            description: "Dev only command.",
+            category: Category.Developer,
             default_member_permission: PermissionsBitField.Flags.Administrator,
             dm_permission: true,
             cooldown: 5,

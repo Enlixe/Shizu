@@ -7,7 +7,7 @@ export default class Emit extends Command{
     constructor(client: ShizuClient){
         super(client, {
             name: "emit",
-            description: "Emit an evenet",
+            description: "Emit an event.",
             dev: true,
             category: Category.Developer,
             default_member_permission: PermissionsBitField.Flags.Administrator,
@@ -31,13 +31,11 @@ export default class Emit extends Command{
     Execute(interaction: ChatInputCommandInteraction) {
         const event = interaction.options.getString("event")
 
-        if(event == Events.GuildCreate || event == Events.GuildDelete) {
+        if(event == Events.GuildCreate || event == Events.GuildDelete)
             this.client.emit(event, interaction.guild as Guild)
-        }
 
-        interaction.reply({ embeds: [ new EmbedBuilder()
-            .setColor(this.client.config.color.default)
-            .setDescription(`Emitted event - \`${event}\``)
+        interaction.reply({ embeds: [
+            this.client.config.createEmbed().setDescription(`Emitted event - \`${event}\``)
         ], flags: 64 })
     }
 }

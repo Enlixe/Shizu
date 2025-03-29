@@ -1,4 +1,4 @@
-import { Collection, Events, REST, Routes } from "discord.js";
+import { ActivityType, Collection, Events, REST, Routes } from "discord.js";
 import Event from "../../base/classes/Events";
 import ShizuClient from "../../base/classes/ShizuClient";
 import Command from "../../base/classes/Command";
@@ -13,8 +13,13 @@ export default class Ready extends Event {
     }
 
     async Execute() {
-        this.client.logger.log(`${this.client.user?.tag} is ready!`, ["Event", "Ready"])
+        this.client.logger.log(`Logged in as ${this.client.user?.tag} (${this.client.user?.id})`, ["Event", "Ready"])
 
+        await this.registerCmd()
+        this.activity()
+    }
+
+    private async registerCmd() {
         const clientId = this.client.devMode ? this.client.config.dev_client_id : this.client.config.client_id;
         const rest = new REST().setToken(this.client.config.token)
 
@@ -31,6 +36,31 @@ export default class Ready extends Event {
         })
 
         this.client.logger.log(`Successfully loaded ${devCommands.length} developer commands.`, ["Event", "Ready"])
+    }
+
+    private activity() {
+        const getActivities = (): string[] => [
+          `Playing with ${this.client.guilds.cache.size} lovely servers 💖`,
+          `Serving ${this.client.users.cache.size} amazing users 🌟`,
+          `Spreading joy and code ✨`,
+          `Type /help to be friends! 🐾`,
+          `Listening to your commands 🎶`,
+          `Making the world cuter, one server at a time 🐱`,
+        ];
+        let activityIndex = Math.floor(Math.random() * 6);;
+        const updateActivity = (): void => {
+          try {
+            const activities = getActivities();
+            const activity = activities[activityIndex];
+            this.client.user?.setActivity(activity, { type: ActivityType.Custom, state: activity });
+            activityIndex = (activityIndex + 1) % activities.length;
+          } catch (err: Error | any) {
+            this.client.logger.error(`Failed to set activity: ${err.message}`, ["Event", "Ready"]);
+          }
+        };
+    
+        updateActivity();
+        setInterval(updateActivity, 4 * 60 * 1000); // Update every 4 minutes
     }
 
     private GetJson(commands: Collection<string, Command>): object[] {

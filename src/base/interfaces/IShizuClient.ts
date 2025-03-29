@@ -1,12 +1,12 @@
 import { Collection } from "discord.js";
-import IConfig from "./IConfig";
+import Config from "../classes/Config";
+import Logger from "../helpers/Logger";
 import Command from "../classes/Command";
 import SubCommand from "../classes/SubCommand";
-import ILogger from "./ILogger";
 
 export default interface IShizuClient {
-    config: IConfig;
-    logger: ILogger;
+    config: Config;
+    logger: Logger;
     commands: Collection<string, Command>;
     subCommands: Collection<string, SubCommand>
     cooldowns: Collection<string, Collection<string, number>>

@@ -1,13 +1,13 @@
-import { ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, PermissionsBitField } from "discord.js";
 import Command from "../../base/classes/Command";
 import ShizuClient from "../../base/classes/ShizuClient";
 import Category from "../../base/enums/Category";
 
-export default class Test extends Command{
+export default class Ping extends Command{
     constructor(client: ShizuClient){
         super(client, {
-            name: "test",
-            description: "Test command.",
+            name: "ping",
+            description: "Ping, pong, ping...",
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
             dm_permission: true,
@@ -17,6 +17,7 @@ export default class Test extends Command{
     }
 
     Execute(interaction: ChatInputCommandInteraction) {
-        interaction.reply({ content: "Test command", flags: 64 })
+        const embed = this.client.config.createEmbed().setDescription(`🏓 Pong! Latency is **${this.client.ws.ping}ms**.`);
+        interaction.reply({ embeds: [embed], flags: 64 })
     }
 }

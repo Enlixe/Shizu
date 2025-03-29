@@ -7,7 +7,7 @@ export default class Status extends Command{
     constructor(client: ShizuClient){
         super(client, {
             name: "status",
-            description: "Status command",
+            description: "Status command.",
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
             dm_permission: true,
@@ -18,25 +18,23 @@ export default class Status extends Command{
 
     Execute(interaction: ChatInputCommandInteraction) {
         let uptime: number = this.client.readyTimestamp ? parseInt((this.client.readyTimestamp / 1000).toString()) : 0;
-        let embed = new EmbedBuilder()
-            .setDescription(`
-            **Client**: \`🟢 ONLINE\` - \`${this.client.ws.ping}ms\`
-            **» Uptime**: <t:${uptime}:R>
-            **» Memory Usage**: \`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB\`
-            **» Guilds**: \`${this.client.guilds.cache.size}\` guilds connected.
-            **» Users**: \`${this.client.users.cache.size}\` users connected.
-            **» Commands**: \`${this.client.commands.size}\` commands loaded.
-        
-            **Database**: \`🟢 CONNECTED\`
-        
-            **Tools**: 
-            » **Node.js**: \`${process.version}\`
-            » **Discord.js**: \`${require("discord.js").version}\`
-            » **Mongoose**: \`${require("mongoose").version}\``)
+        let embed = this.client.config.createEmbed()
+            .setDescription(
+                `**Client**: \`🟢 ONLINE\` - \`${this.client.ws.ping}ms\`\n` +
+                `**» Uptime**: <t:${uptime}:R>\n` +
+                `**» Memory Usage**: \`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB\`\n` +
+                `**» Guilds**: \`${this.client.guilds.cache.size}\` guilds connected.\n` +
+                `**» Users**: \`${this.client.users.cache.size}\` users connected.\n` +
+                `**» Commands**: \`${this.client.commands.size}\` commands loaded.\n\n` +
+                `**Database**: \`🟢 CONNECTED\`\n\n` +
+                `**Tools**: \n` +
+                `» **Node.js**: \`${process.version}\`\n` +
+                `» **Discord.js**: \`${require("discord.js").version}\`\n` +
+                `» **Mongoose**: \`${require("mongoose").version}\``)
             .setTitle(`Status`)
-            .setAuthor({ name: this.client.user?.username ?? "-", iconURL: this.client.user?.avatarURL() ?? "" })
+            .setAuthor({ name: `${this.client.user?.username ?? ""}`, iconURL: `${this.client.user?.avatarURL() ?? ""}` })
             .setTimestamp();
         
-        interaction.reply({ embeds: [embed], flags: 64 })
+        interaction.reply({ embeds: [embed] })
     }
 }
