@@ -14,50 +14,60 @@ export default class Handler implements IHandler {
 
     async LoadEvents(): Promise<void> {
         const files: string[] = (await glob('build/events/**/*.js')).map(file => path.resolve(file));
-    
-        files.map(async (file: string) => {
+        
+        await Promise.all(files.map(async (file: string) => {
             try {
                 const e: Event = new (await import(file)).default(this.client);
-    
-                if (!e.name) {
-                    return delete require.cache[require.resolve(file)] && console.log(`${file.split('/').pop()} doesn't have a name`);
-                }
-    
-                const execute = (...args: any[]) => e.Execute(...args);
-    
-                //@ts-ignore
-                if (e.once) this.client.once(e.name, execute);
-                //@ts-ignore
-                else this.client.on(e.name, execute);
+                this.registerEvent(e, file);
             } catch (error: any) {
                 this.client.logger.error(`Failed to load event from file ${file}: ${error.message}`, ["Handler", "LoadEvents"]);
-            } finally {
-                return delete require.cache[require.resolve(file)];
             }
-        });
+        }));
+    }
+    
+    private registerEvent(event: Event, file: string): void {
+        if (!event.name) {
+            delete require.cache[require.resolve(file)];
+            console.log(`${file.split('/').pop()} doesn't have a name`);
+            return;
+        }
+    
+        const execute = (...args: any[]) => event.Execute(...args);
+    
+        //@ts-ignore
+        if (event.once) this.client.once(event.name, execute);
+        //@ts-ignore
+        else this.client.on(event.name, execute);
+    
+        delete require.cache[require.resolve(file)];
     }
 
     async LoadCommands(): Promise<void> {
         const files: string[] = (await glob('build/commands/**/*.js')).map(file => path.resolve(file));
-    
-        files.map(async (file: string) => {
+        
+        await Promise.all(files.map(async (file: string) => {
             try {
                 const c: Command | SubCommand = new (await import(file)).default(this.client);
-    
-                if (!c.name) {
-                    return delete require.cache[require.resolve(file)] && console.log(`${file.split('/').pop()} doesn't have a name`);
-                }
-    
-                if (file.split('/').pop()?.split('.')[2]) {
-                    return this.client.subCommands.set(c.name, c);
-                }
-    
-                this.client.commands.set(c.name, c as Command);
+                this.registerCommand(c, file);
             } catch (error: any) {
                 this.client.logger.error(`Failed to load command from file ${file}: ${error.message}`, ["Handler", "LoadCommands"]);
-            } finally {
-                return delete require.cache[require.resolve(file)];
             }
-        });
+        }));
+    }
+    
+    private registerCommand(command: Command | SubCommand, file: string): void {
+        if (!command.name) {
+            delete require.cache[require.resolve(file)];
+            console.log(`${file.split('/').pop()} doesn't have a name`);
+            return;
+        }
+    
+        if (file.split('/').pop()?.split('.')[2]) {
+            this.client.subCommands.set(command.name, command);
+        } else {
+            this.client.commands.set(command.name, command as Command);
+        }
+    
+        delete require.cache[require.resolve(file)];
     }
 }
