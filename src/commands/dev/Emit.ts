@@ -9,6 +9,7 @@ import {
 import Command from "../../base/classes/Command";
 import ShizuClient from "../../base/classes/ShizuClient";
 import Category from "../../base/enums/Category";
+import { DEFAULT_COOLDOWN, DEFAULT_FLAGS } from "../../base/constants";
 
 export default class Emit extends Command {
   constructor(client: ShizuClient) {
@@ -19,7 +20,7 @@ export default class Emit extends Command {
       category: Category.Developer,
       default_member_permission: PermissionsBitField.Flags.Administrator,
       dm_permission: false,
-      cooldown: 1,
+      cooldown: DEFAULT_COOLDOWN,
       options: [
         {
           name: "event",
@@ -49,7 +50,7 @@ export default class Emit extends Command {
             .createEmbed()
             .setDescription(`Emitted event - \`${event}\``),
         ],
-        flags: 64,
+        flags: DEFAULT_FLAGS,
       });
     } catch (error: any) {
       this.client.logger.error(

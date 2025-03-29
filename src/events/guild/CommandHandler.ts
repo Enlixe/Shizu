@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, Collection, EmbedBuilder, Events } from "d
 import Event from "../../base/classes/Events";
 import ShizuClient from "../../base/classes/ShizuClient";
 import Command from "../../base/classes/Command";
+import { DEFAULT_COOLDOWN } from "../../base/constants";
 
 export default class CommandHandler extends Event {
     constructor(client: ShizuClient) {
@@ -36,7 +37,7 @@ export default class CommandHandler extends Event {
     
         const now = Date.now();
         const timestamps = cooldowns.get(cmd.name);
-        const cooldownAmount = (cmd.cooldown || 3) * 1000;
+        const cooldownAmount = (cmd.cooldown || DEFAULT_COOLDOWN) * 1000;
     
         if (timestamps?.has(interaction.user.id) && (now < (timestamps?.get(interaction.user.id) || 0) + cooldownAmount)) {
             return interaction.reply({

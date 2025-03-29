@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, PermissionsBitField } from "discord.js";
 import Command from "../../base/classes/Command";
 import ShizuClient from "../../base/classes/ShizuClient";
 import Category from "../../base/enums/Category";
+import { DEFAULT_COOLDOWN, DEFAULT_FLAGS } from "../../base/constants";
 
 export default class DevOnly extends Command{
     constructor(client: ShizuClient){
@@ -11,13 +12,13 @@ export default class DevOnly extends Command{
             category: Category.Developer,
             default_member_permission: PermissionsBitField.Flags.Administrator,
             dm_permission: true,
-            cooldown: 5,
+            cooldown: DEFAULT_COOLDOWN,
             options: [],
             dev: true
         })
     }
 
-    Execute(interaction: ChatInputCommandInteraction) {
-        interaction.reply({ content: "This is a developer command", flags: 64 })
+    Execute(interaction: ChatInputCommandInteraction): void {
+        interaction.reply({ content: "This is a developer command", flags: DEFAULT_FLAGS });
     }
 }

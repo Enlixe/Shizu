@@ -2,6 +2,7 @@ import { ActionRowBuilder, ChatInputCommandInteraction, ComponentType, EmbedBuil
 import Command from "../../base/classes/Command";
 import ShizuClient from "../../base/classes/ShizuClient";
 import Category from "../../base/enums/Category";
+import { DEFAULT_COOLDOWN, DEFAULT_TIMEOUT } from "../../base/constants";
 
 const EMOJIS: Record<string, string> = {
     utilities: "📝",
@@ -18,7 +19,7 @@ export default class Help extends Command {
             category: Category.Utilities,
             default_member_permission: PermissionsBitField.Flags.UseApplicationCommands,
             dm_permission: true,
-            cooldown: 10,
+            cooldown: DEFAULT_COOLDOWN * 5,
             options: []
         });
     }
@@ -57,7 +58,7 @@ export default class Help extends Command {
 
         const filter = (interaction: Interaction) => interaction.user.id === interaction.user.id;
 
-        const collector = channel?.createMessageComponentCollector({ filter, componentType: ComponentType.StringSelect, time: 60000 });
+        const collector = channel?.createMessageComponentCollector({ filter, componentType: ComponentType.StringSelect, time: DEFAULT_TIMEOUT });
 
         collector?.on("collect", async (interaction) => {
             const [directory] = interaction.values;
