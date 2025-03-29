@@ -18,7 +18,7 @@ function writeLog(level: string, text: string, groups: string[], colorFn: (text:
 }
 
 export default class Logger {
-    public log(text: string, groups: string[]) {
+    public log(text: string, groups: string[]): void {
         writeLog("i", text, groups, chalk.green);
     }
 
@@ -26,7 +26,7 @@ export default class Logger {
         writeLog("e", text, groups, chalk.redBright);
     }
 
-    public warn(text: string, groups: string[] = []): void {
+    public warn(text: string, groups: string[]): void {
         writeLog("w", text, groups, chalk.keyword("orange"));
     }
 }

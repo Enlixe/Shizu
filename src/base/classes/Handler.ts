@@ -13,7 +13,7 @@ export default class Handler implements IHandler {
     }
 
     async LoadEvents(): Promise<void> {
-        const files = (await glob('build/events/**/*.js')).map(file => path.resolve(file));
+        const files: string[] = (await glob('build/events/**/*.js')).map(file => path.resolve(file));
     
         files.map(async (file: string) => {
             try {
@@ -38,7 +38,7 @@ export default class Handler implements IHandler {
     }
 
     async LoadCommands(): Promise<void> {
-        const files = (await glob('build/commands/**/*.js')).map(file => path.resolve(file));
+        const files: string[] = (await glob('build/commands/**/*.js')).map(file => path.resolve(file));
     
         files.map(async (file: string) => {
             try {

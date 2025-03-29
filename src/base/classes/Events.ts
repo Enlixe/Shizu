@@ -16,5 +16,5 @@ export default class Event implements IEvent {
     this.once = options.once;
   }
 
-  Execute(...args: any): void {};
+  Execute(...args: any[]): void {};
 }

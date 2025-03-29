@@ -36,13 +36,12 @@ export default class Emit extends Command {
     });
   }
 
-  Execute(interaction: ChatInputCommandInteraction) {
+  Execute(interaction: ChatInputCommandInteraction): void {
     try {
-      const event = interaction.options.getString("event");
+      const event: string | null = interaction.options.getString("event");
 
-      if (event == Events.GuildCreate || event == Events.GuildDelete) {
+      if (event == Events.GuildCreate || event == Events.GuildDelete)
         this.client.emit(event, interaction.guild as Guild);
-      }
 
       interaction.reply({
         embeds: [
