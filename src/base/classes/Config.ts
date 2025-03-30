@@ -49,20 +49,26 @@ export default class Config implements IConfig {
     let _desc = "";
 
     switch (type) {
-      case "default":
+      case "default": {
         embed.setColor(this.color.default);
         break;
-      case "success":
-        embed.setColor(this.color.green);
+      }
+      case "success": {
         _desc = "✅ Success.";
+        embed.setColor(this.color.green);
         break;
-      case "error":
-        embed.setColor(this.color.red);
+      }
+      case "error": {
         _desc = " ❌ An error occurred while executing the command.";
+        embed.setColor(this.color.red);
         break;
+      }
     }
-    desc ? (desc = desc) : (desc = _desc);
-    embed.setDescription(desc);
+    desc
+      ? embed.setDescription(desc)
+      : _desc !== ""
+        ? embed.setDescription(_desc)
+        : null;
     return embed;
   }
 }
