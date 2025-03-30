@@ -1,19 +1,18 @@
 {
   "name": "shizu",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "description": "",
-  "main": "./src/Shizu.js",
+  "main": "./src/Shizu.ts",
   "scripts": {
-    "clean": "del /s /q build",
-    "build": "tsc -build",
-    "start": "npm run clean && npm run build && node build/Shizu.js",
-    "startNoClean": "npm run build && node build/Shizu.js",
-    "devStart": "npm run clean && npm run build && node build/Shizu.js --dev",
-    "devStartNoClean": "npm run build && node build/Shizu.js --dev",
-    "dev": "tsx watch src/Shizu.ts"
+    "start": "npm run start:bot",
+    "prestart:bot": "npm run clean && npm run build",
+    "start:bot": "node dist/Shizu.js",
+    "dev:bot": "nodemon src/Shizu.ts --dev",
+    "clean": "del /s /q dist",
+    "build": "tsc --project tsconfig.json"
   },
   "author": "Enlixe",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "4.0.0",
     "discord.js": "^14.11.0",
