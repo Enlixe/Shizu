@@ -15,6 +15,7 @@ import { DEFAULT_COOLDOWN, DEFAULT_TIMEOUT } from "../../base/constants";
 const EMOJIS: Record<string, string> = {
   utilities: "📝",
   administrator: "🛠️",
+  moderation: "👥",
   // developer category is intentionally left out
 };
 
