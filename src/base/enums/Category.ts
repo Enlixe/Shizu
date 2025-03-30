@@ -1,6 +1,8 @@
 enum Category {
-    Utilities = "Utilities",
-    Developer = "Developer"
+  Utilities = "Utilities",
+  Administrator = "Administrator",
+  Developer = "Developer",
+  Moderation = "Moderation",
 }
 
-export default Category
+export default Category;

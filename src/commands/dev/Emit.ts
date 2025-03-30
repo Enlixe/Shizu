@@ -46,7 +46,7 @@ export default class Emit extends Command {
       interaction.reply({
         embeds: [
           this.client.config
-            .createEmbed()
+            .createEmbed("default")
             .setDescription(`Emitted event - \`${event}\``),
         ],
         flags: DEFAULT_FLAGS,
@@ -57,7 +57,7 @@ export default class Emit extends Command {
         ["Command", "Emit"]
       );
       interaction.reply({
-        content: "An error occurred while executing the command.",
+        embeds: [this.client.config.createEmbed("error")],
         ephemeral: true,
       });
     }
