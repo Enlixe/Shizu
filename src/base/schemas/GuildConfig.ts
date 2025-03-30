@@ -8,6 +8,11 @@ interface IGuildConfig {
       channelId: string;
     };
   };
+  // welcome: {
+  //   enabled: boolean
+  //   channelId: string
+
+  // }
 }
 
 export default model<IGuildConfig>(

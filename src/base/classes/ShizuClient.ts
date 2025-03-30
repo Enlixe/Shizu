@@ -6,6 +6,7 @@ import Config from "./Config";
 import Command from "./Command";
 import SubCommand from "./SubCommand";
 import { connect } from "mongoose";
+import Button from "./Button";
 
 export default class ShizuClient extends Client implements IShizuClient {
   devMode: boolean;
@@ -15,6 +16,7 @@ export default class ShizuClient extends Client implements IShizuClient {
   commands: Collection<string, Command>;
   subCommands: Collection<string, SubCommand>;
   cooldowns: Collection<string, Collection<string, number>>;
+  buttons: Collection<string, Button>;
 
   constructor() {
     super({ intents: [GatewayIntentBits.Guilds] });
@@ -26,6 +28,7 @@ export default class ShizuClient extends Client implements IShizuClient {
     this.commands = new Collection();
     this.subCommands = new Collection();
     this.cooldowns = new Collection();
+    this.buttons = new Collection();
   }
   Init(): void {
     this.logger.log(
@@ -57,5 +60,6 @@ export default class ShizuClient extends Client implements IShizuClient {
   LoadHandlers(): void {
     this.handler.LoadEvents();
     this.handler.LoadCommands();
+    this.handler.LoadButtons();
   }
 }
