@@ -43,7 +43,7 @@ export default class LogsToggle extends SubCommand {
         embeds: [
           this.client.config.createEmbed(
             "error",
-            "❌ There was an error wile updating the database, please try again!"
+            "❌ There was an error while updating the database, please try again!"
           ),
         ],
       });

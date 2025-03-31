@@ -4,6 +4,7 @@ import {
   EmbedBuilder,
   Events,
   Guild,
+  GuildMember,
   PermissionsBitField,
 } from "discord.js";
 import Command from "../../base/classes/Command";
@@ -30,6 +31,7 @@ export default class Emit extends Command {
           choices: [
             { name: "GuildCreate", value: Events.GuildCreate },
             { name: "GuildDelete", value: Events.GuildDelete },
+            { name: "GuildMemberAdd", value: Events.GuildMemberAdd },
           ],
         },
       ],
@@ -38,10 +40,13 @@ export default class Emit extends Command {
 
   Execute(interaction: ChatInputCommandInteraction): void {
     try {
-      const event: string | null = interaction.options.getString("event");
+      const event: string = interaction.options.getString("event") as string;
 
       if (event == Events.GuildCreate || event == Events.GuildDelete)
         this.client.emit(event, interaction.guild as Guild);
+
+      if (event == Events.GuildMemberAdd)
+        this.client.emit(event, interaction.member as GuildMember);
 
       interaction.reply({
         embeds: [

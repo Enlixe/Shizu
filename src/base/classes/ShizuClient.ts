@@ -19,7 +19,9 @@ export default class ShizuClient extends Client implements IShizuClient {
   buttons: Collection<string, Button>;
 
   constructor() {
-    super({ intents: [GatewayIntentBits.Guilds] });
+    super({
+      intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+    });
 
     this.devMode = process.argv.slice(2).includes("--dev");
     this.config = new Config();

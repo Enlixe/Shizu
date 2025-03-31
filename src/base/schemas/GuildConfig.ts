@@ -8,11 +8,12 @@ interface IGuildConfig {
       channelId: string;
     };
   };
-  // welcome: {
-  //   enabled: boolean
-  //   channelId: string
-
-  // }
+  welcome: {
+    enabled: boolean;
+    channelId: string;
+    msg: string;
+    attachment: string;
+  };
 }
 
 export default model<IGuildConfig>(
@@ -25,6 +26,12 @@ export default model<IGuildConfig>(
           enabled: Boolean,
           channelId: String,
         },
+      },
+      welcome: {
+        enabled: Boolean,
+        channelId: String,
+        msg: String,
+        attachment: String,
       },
     },
     {

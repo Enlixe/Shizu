@@ -3,16 +3,17 @@ import ShizuClient from "../../base/classes/ShizuClient";
 import SubCommand from "../../base/classes/SubCommand";
 import GuildConfig from "../../base/schemas/GuildConfig";
 
-export default class LogsSet extends SubCommand {
+export default class WelcomeSet extends SubCommand {
   constructor(client: ShizuClient) {
     super(client, {
-      name: "logs.set",
+      name: "welcome.set",
     });
   }
 
   async Execute(interaction: ChatInputCommandInteraction) {
-    const logType = interaction.options.getString("log-type");
     const channel = interaction.options.getChannel("channel") as TextChannel;
+    const msg = interaction.options.getString("msg");
+    const attachment = interaction.options.getString("attachment");
 
     await interaction.deferReply({ flags: 64 });
 
@@ -21,8 +22,9 @@ export default class LogsSet extends SubCommand {
       if (!guild)
         guild = await GuildConfig.create({ guildId: interaction.guildId });
 
-      //@ts-ignore
-      guild.logs[`${logType}`].channelId = channel.id;
+      guild.welcome.channelId = channel.id;
+      guild.welcome.msg = msg || "";
+      guild.welcome.attachment = attachment || "";
 
       await guild.save();
 
@@ -30,14 +32,16 @@ export default class LogsSet extends SubCommand {
         embeds: [
           this.client.config.createEmbed(
             "success",
-            `✅ Updated \`${logType}\` logs to send to ${channel}`
+            `✅ Updated \`welcomer\` to send to ${channel}\n` +
+              `**» Message:** ${msg ?? "Default"}\n` +
+              `**» Attachment:** ${attachment ?? "None"}`
           ),
         ],
       });
     } catch (error: unknown) {
       this.client.logger.error(
-        `Failed to execute logs.set command: ${(error as Error).message}`,
-        ["Command", "Logs"]
+        `Failed to execute welcome.set command: ${(error as Error).message}`,
+        ["Command", "Welcome"]
       );
       interaction.editReply({
         embeds: [
